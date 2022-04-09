@@ -16,6 +16,7 @@ public class AppTest
     public void shouldAnswerWithTrue()
     {
         System.out.println("これはAppTestのshouldAnswerWithTrue");
+        System.out.println("LFに変更");
         assertTrue( true );
     }
 }
