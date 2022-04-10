@@ -18,6 +18,7 @@ public class AppTest
         System.out.println("これはAppTestのshouldAnswerWithTrue");
         System.out.println("LFに変更");
         System.out.println("さらに変更");
+        System.out.println("GitはGitHub Desktopで");
         assertTrue( true );
     }
 }
