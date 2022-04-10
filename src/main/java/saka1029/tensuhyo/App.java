@@ -10,5 +10,6 @@ public class App
     {
         System.out.println("LFに変更");
         System.out.println( "Hello World!" );
+        System.out.println("再度LFに変更");
     }
 }

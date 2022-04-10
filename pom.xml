@@ -26,6 +26,7 @@
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
     <!-- コメント追加/変更 -->
+    <!-- 改行コードをLFに -->
     <dependency>
         <groupId>org.apache.pdfbox</groupId>
         <artifactId>pdfbox</artifactId>
