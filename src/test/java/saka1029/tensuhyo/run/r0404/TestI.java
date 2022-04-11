@@ -35,6 +35,7 @@ import saka1029.tensuhyo.pdf.Pdf;
 import saka1029.tensuhyo.pdf.StringFunction;
 import saka1029.tensuhyo.pdf.別添;
 import saka1029.tensuhyo.pdf.別添関数;
+import saka1029.tensuhyo.util.LogFormatter;
 import saka1029.tensuhyo.util.StringConverter;
 import saka1029.tensuhyo.util.TextIO;
 import saka1029.tensuhyo.util.TextWriter;
@@ -52,6 +53,8 @@ import saka1029.tensuhyo.util.TextWriter;
  * 2018-03-09: K549   通知(6)    経皮的冠動脈ステント留置術
  */
 public class TestI {
+
+	static { LogFormatter.init(); }
 
 	private static final String TEN = "i";
 	private static final String TENSU = "医科";
@@ -92,6 +95,7 @@ public class TestI {
 	};
 
     private static String PAGE_NO_PAT = "^\\s*-\\s*[0-9０-９]+\\s*-\\s*$";
+
 
 	@Test
 	public void kokuji() throws IOException {

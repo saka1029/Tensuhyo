@@ -20,11 +20,14 @@ import saka1029.tensuhyo.parser.施設基準告示読込;
 import saka1029.tensuhyo.parser.施設基準通知読込;
 import saka1029.tensuhyo.pdf.Pdf;
 import saka1029.tensuhyo.pdf.StringFunction;
+import saka1029.tensuhyo.util.LogFormatter;
 import saka1029.tensuhyo.util.TextIO;
 import saka1029.tensuhyo.util.TextWriter;
 
 public class TestK {
 
+	static { LogFormatter.init(); }
+	
 	private static final String TEN = "k";
 	private static final String TENSU = "施設基準";
 

@@ -5,12 +5,9 @@ import static saka1029.tensuhyo.run.r0110.Commons.GENGO;
 import static saka1029.tensuhyo.run.r0110.Commons.OLD_GENGO;
 import static saka1029.tensuhyo.run.r0110.Commons.OLD_YEAR;
 import static saka1029.tensuhyo.run.r0110.Commons.YEAR;
-import static saka1029.tensuhyo.run.r0110.Commons.getLogger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.junit.Test;
 
@@ -21,16 +18,13 @@ import saka1029.tensuhyo.parser.Node;
 import saka1029.tensuhyo.parser.ParseException;
 import saka1029.tensuhyo.parser.Parser;
 import saka1029.tensuhyo.parser.医科告示読込;
+import saka1029.tensuhyo.util.LogFormatter;
 import saka1029.tensuhyo.util.TextIO;
 import saka1029.tensuhyo.util.TextWriter;
 
 public class TestIKubun {
 
-	static final Logger logger = getLogger(TestIKubun.class.getName());
-
-	static void log(String format, Object... args) {
-		logger.log(Level.INFO, String.format(format, args));
-	}
+	static { LogFormatter.init(); }
 
 	static final String BASE_DIR = "data/in/";
 	static final String TEN = "i";
