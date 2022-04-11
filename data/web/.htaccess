@@ -1,0 +1,5 @@
+#####htaccess#####
+###Redirect permanent / http://tensuhyo.html.xdomain.jp/
+Header always append X-Frame-Options SAMEORIGIN
+ErrorDocument 404 /not_found.html
+#####end:htaccess#####

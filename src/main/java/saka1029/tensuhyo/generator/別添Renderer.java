@@ -15,7 +15,7 @@ public class 別添Renderer {
         w.printf("<div id='breadcrumb'>%n");
         w.printf("<b>%n");
 		w.printf("<a href='../../index.html'>診療報酬点数表</a>%n");
-        w.printf("&gt; 別紙様式一覧%n");
+        w.printf("&gt; %s%n", callback.共通タイトル());
 		w.printf("<div id='menu'></div>");
         w.printf("</b>%n");
         w.printf("</div>%n");

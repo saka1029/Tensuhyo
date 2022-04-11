@@ -1,0 +1,131 @@
+@charset 'UTF-8';
+    body {
+        Xfont-family: monospace;
+        font-family:'ＭＳ ゴシック', 'MS Gothic', 'Osaka－等幅', 'Osaka-Mono', monospace;
+/*      font-size: 100%; */
+/*      Xfont-size: 12pt; */
+/*      X-webkit-text-size-adjust: none; */
+        -webkit-text-size-adjust: 100%;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        line-height: 160%;
+/*      width: 640px; */
+        margin-left: 0.5em;
+        margin-right: 0.5em;
+    }
+#all {
+    margin: 0 auto;
+    max-width: 640px;
+}
+#breadcrumb {
+    border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    -webkit-border-radius: 0.25em;
+    border: 2px green solid;
+    background-color: #ddffdd;
+    padding: 0.5em;
+}
+/***
+#breadcrumb:before {
+    content: "令和４年度版追加！ →";
+    font-weight: bold;
+    color: #ff0000;
+}
+***/
+#tuti {
+    border: none;
+    background-color: #e0e0e0;
+    padding: 0.25em;
+}
+ul {
+    list-style: none;
+    margin: 0 0 0 1em;
+    padding: 0;
+}
+.tensu {
+    color: red;
+}
+.link-menu {
+    color: white;
+    background-color:  #6699cc;
+    padding: 3px;
+    white-space: nowrap;
+    border-radius: 3px;
+}
+.link-menu-new {
+    color: white;
+    background-color:  #ee0000;
+    padding: 3px;
+    white-space: nowrap;
+    border-radius: 3px;
+}
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+.caution {
+    color: white;
+    background-color:  red;
+    padding: 3px;
+}
+h1 {
+    font-size: 120%;
+}
+h2 {
+    font-size: 100%;
+    border-bottom: 2px solid green;
+    border-left: 1em solid green;
+/*  background-color: #DDDDFF; */
+    padding-left: 0.5em;
+}
+h3 {
+    font-size: 100%;
+    border-bottom: 2px solid lightgreen;
+    border-left: 1em solid lightgreen;
+/*  background-color: #DDDDFF; */
+    padding-left: 0.5em;
+/*  margin-right: 2em; */
+}
+.m0 { margin-left: 0.0em; text-indent: -0.0em; }
+.m1 { margin-left: 0.5em; text-indent: -0.5em; }
+.m2 { margin-left: 1.0em; text-indent: -1.0em; }
+.m3 { margin-left: 1.5em; text-indent: -1.5em; }
+.m4 { margin-left: 2.0em; text-indent: -2.0em; }
+.m5 { margin-left: 2.5em; text-indent: -2.5em; }
+.m6 { margin-left: 3.0em; text-indent: -3.0em; }
+.m7 { margin-left: 3.5em; text-indent: -3.5em; }
+.m8 { margin-left: 4.0em; text-indent: -4.0em; }
+.m9 { margin-left: 4.5em; text-indent: -4.5em; }
+.m10 { margin-left: 5.0em; text-indent: -5.0em; }
+.m11 { margin-left: 5.5em; text-indent: -5.5em; }
+.m12 { margin-left: 6.0em; text-indent: -6.0em; }
+.m13 { margin-left: 6.5em; text-indent: -6.5em; }
+.m14 { margin-left: 7.0em; text-indent: -7.0em; }
+.m15 { margin-left: 7.5em; text-indent: -7.5em; }
+.m16 { margin-left: 8.0em; text-indent: -8.0em; }
+.m17 { margin-left: 8.5em; text-indent: -8.5em; }
+.m18 { margin-left: 9.0em; text-indent: -9.0em; }
+.m19 { margin-left: 9.5em; text-indent: -9.5em; }
+.m20 { margin-left: 10.0em; text-indent: -10.0em; }
+.m21 { margin-left: 10.5em; text-indent: -10.5em; }
+.m22 { margin-left: 11.0em; text-indent: -11.0em; }
+.m23 { margin-left: 11.5em; text-indent: -11.5em; }
+.m24 { margin-left: 12.0em; text-indent: -12.0em; }
+.m25 { margin-left: 12.5em; text-indent: -12.5em; }
+.m26 { margin-left: 13.0em; text-indent: -13.0em; }
+.m27 { margin-left: 13.5em; text-indent: -13.5em; }
+.m28 { margin-left: 14.0em; text-indent: -14.0em; }
+.m29 { margin-left: 14.5em; text-indent: -14.5em; }
+.m30 { margin-left: 15.0em; text-indent: -15.0em; }
+.m31 { margin-left: 15.5em; text-indent: -15.5em; }
+.m32 { margin-left: 16.0em; text-indent: -16.0em; }
+.m33 { margin-left: 16.5em; text-indent: -16.5em; }
+.m34 { margin-left: 17.0em; text-indent: -17.0em; }
+.m35 { margin-left: 17.5em; text-indent: -17.5em; }
+.m36 { margin-left: 18.0em; text-indent: -18.0em; }
+.m37 { margin-left: 18.5em; text-indent: -18.5em; }
+.m38 { margin-left: 19.0em; text-indent: -19.0em; }
+.m39 { margin-left: 19.5em; text-indent: -19.5em; }
+dt.history { font-weight: bolder; }

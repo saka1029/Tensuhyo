@@ -41,7 +41,10 @@ public class 施設基準Renderer {
         w.printf("<div id='breadcrumb'>%n");
         w.printf("<b>%n");
         breadCrumb(node.parent(), w);
+        w.printf("&gt; %s%n", callback.共通タイトル());
         w.printf("</b>%n");
+        w.printf("<hr>%n");
+        w.printf("<div id='menu'></div>%n");
         if (callback != null)
             callback.index(node, w);
         w.printf("</div>%n");
@@ -68,6 +71,10 @@ public class 施設基準Renderer {
                 index(child, w);
     }
 
+	private void endBody(TextWriter w) throws IOException {
+	    w.printf("<script type='text/javascript' src='../../js/menu.js'></script>%n");
+	}
+
     private void index(Document doc, TextWriter w) throws IOException {
         String url = String.format("%s/0.html", callback.baseUrl());
         w.printf("%s%n", Renderer.DOCTYPE);
@@ -91,6 +98,7 @@ public class 施設基準Renderer {
         w.printf("</div>%n");
         Renderer.writeShare(w, title, url);
         w.printf("</div>%n");
+        endBody(w);
         w.printf("</body>%n");
         w.printf("</html>%n");
     }
