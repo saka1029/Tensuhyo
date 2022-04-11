@@ -1,2 +1,2 @@
 # 診療報酬点数表
-ここに何か書く。
+[GitHub内ホームページ](https://saka1029.github.io/Tensuhyo/data/web/)
