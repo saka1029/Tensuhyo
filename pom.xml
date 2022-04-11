@@ -25,21 +25,21 @@
       <scope>test</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
-    <!-- コメント追加/変更 -->
-    <!-- 改行コードをLFに -->
-    <!-- 変更してみる -->
+    <!-- PDFをテキストに変換するために使用 -->
     <dependency>
         <groupId>org.apache.pdfbox</groupId>
         <artifactId>pdfbox</artifactId>
         <version>1.7.1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+    <!-- アップロードのためFTPを使用 -->
     <dependency>
         <groupId>commons-net</groupId>
         <artifactId>commons-net</artifactId>
         <version>3.3</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+    <!-- 厚生労働省のホームページをチェックするために使用 -->
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
