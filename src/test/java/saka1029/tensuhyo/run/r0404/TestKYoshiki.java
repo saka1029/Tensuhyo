@@ -18,12 +18,12 @@ import saka1029.tensuhyo.generator.別添RendererCallback;
 import saka1029.tensuhyo.pdf.Pdf;
 import saka1029.tensuhyo.pdf.別添;
 import saka1029.tensuhyo.pdf.別添関数;
-import saka1029.tensuhyo.util.LogFormatter;
+import saka1029.tensuhyo.util.Common;
 import saka1029.tensuhyo.util.StringConverter;
 
 public class TestKYoshiki {
 
-	static { LogFormatter.init(); }
+	static { Common.config(); }
 
 	private static final String TEN = "k";
 

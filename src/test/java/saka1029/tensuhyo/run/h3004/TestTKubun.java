@@ -14,13 +14,13 @@ import saka1029.tensuhyo.parser.Node;
 import saka1029.tensuhyo.parser.ParseException;
 import saka1029.tensuhyo.parser.Parser;
 import saka1029.tensuhyo.parser.調剤告示読込;
-import saka1029.tensuhyo.util.LogFormatter;
+import saka1029.tensuhyo.util.Common;
 import saka1029.tensuhyo.util.TextIO;
 import saka1029.tensuhyo.util.TextWriter;
 
 public class TestTKubun {
 
-	static { LogFormatter.init(); }
+	static { Common.config(); }
 
 	static final String BASE_DIR = "data/in/";
 	static final String TEN = "t";

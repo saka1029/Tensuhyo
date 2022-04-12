@@ -6,10 +6,6 @@ import java.util.logging.LogRecord;
 
 public class LogFormatter extends Formatter {
 
-	public static void init() {
-        System.setProperty("java.util.logging.config.file", "logging.properties");
-	}
-
 	@Override
 	public String format(LogRecord record) {
 		Date now = new Date(record.getMillis());

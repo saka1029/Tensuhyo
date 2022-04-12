@@ -33,7 +33,7 @@ import saka1029.tensuhyo.pdf.Pdf;
 import saka1029.tensuhyo.pdf.StringFunction;
 import saka1029.tensuhyo.pdf.別添;
 import saka1029.tensuhyo.pdf.別添関数;
-import saka1029.tensuhyo.util.LogFormatter;
+import saka1029.tensuhyo.util.Common;
 import saka1029.tensuhyo.util.StringConverter;
 import saka1029.tensuhyo.util.TextIO;
 import saka1029.tensuhyo.util.TextWriter;
@@ -45,7 +45,7 @@ import saka1029.tensuhyo.util.TextWriter;
  */
 public class TestS {
 
-	static { LogFormatter.init(); }
+	static { Common.config(); }
 
 	private static final String TEN = "s";
 	private static final String TENSU = "歯科";
