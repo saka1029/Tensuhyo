@@ -23,7 +23,7 @@ public class 施設基準Renderer {
 
     private void breadCrumb(Node node, TextWriter w) {
         if (node == null) {
-            w.printf("<a href='../../index.html'>診療報酬点数表</a>%n");
+            w.printf("<a href='../../index.html'>診療報酬点数表</a>\n");
             return;
         }
         breadCrumb(node.parent(), w);
@@ -32,22 +32,22 @@ public class 施設基準Renderer {
         else if (node.nodeName().equals("施設基準別表"))
             w.printf("");
         else
-            w.printf("&gt; <a href='%s.html'>%s %s</a>%n", node.fileName(), node.number(), node.header());
+            w.printf("&gt; <a href='%s.html'>%s %s</a>\n", node.fileName(), node.number(), node.header());
     }
 
     private void header(Node node, TextWriter w) {
         if (node == null)
             return;
-        w.printf("<div id='breadcrumb'>%n");
-        w.printf("<b>%n");
+        w.printf("<div id='breadcrumb'>\n");
+        w.printf("<b>\n");
         breadCrumb(node.parent(), w);
-        w.printf("&gt; %s%n", callback.共通タイトル());
-        w.printf("</b>%n");
-        w.printf("<hr>%n");
-        w.printf("<div id='menu'></div>%n");
+        w.printf("&gt; %s\n", callback.共通タイトル());
+        w.printf("</b>\n");
+        w.printf("<hr>\n");
+        w.printf("<div id='menu'></div>\n");
         if (callback != null)
             callback.index(node, w);
-        w.printf("</div>%n");
+        w.printf("</div>\n");
     }
 
     private void index(Node node, TextWriter w) throws IOException {
@@ -57,50 +57,50 @@ public class 施設基準Renderer {
             // node.number().length() + 2);
             // int indent = (MAX_HEADER_SIZE + 2) * 2;
             int indent = node.number().length() * 2 + 5;
-            w.printf("<p id='%s' class='m%d'><a href='%s.html'>　　%s %s</a></p>%n", node.fileName(), indent,
+            w.printf("<p id='%s' class='m%d'><a href='%s.html'>　　%s %s</a></p>\n", node.fileName(), indent,
                 node.fileName(), node.number(), node.header());
         } else if (name.equals("施設基準等")) {
             String id = node.number().contains("基本診療料") ? "1" : "2";
-            w.printf("<p id='%s' class='m2'>　%s</p>%n", id, node.number());
-            // w.printf("<ul>%n");
+            w.printf("<p id='%s' class='m2'>　%s</p>\n", id, node.number());
+            // w.printf("<ul>\n");
             for (Node child : node.children())
                 index(child, w);
-            // w.printf("</ul>%n");
+            // w.printf("</ul>\n");
         } else
             for (Node child : node.children())
                 index(child, w);
     }
 
 	private void endBody(TextWriter w) throws IOException {
-	    w.printf("<script type='text/javascript' src='../../js/menu.js'></script>%n");
+	    w.printf("<script type='text/javascript' src='../../js/menu.js'></script>\n");
 	}
 
     private void index(Document doc, TextWriter w) throws IOException {
         String url = String.format("%s/0.html", callback.baseUrl());
-        w.printf("%s%n", Renderer.DOCTYPE);
-        w.printf("<html>%n");
-        w.printf("<head>%n");
+        w.printf("%s\n", Renderer.DOCTYPE);
+        w.printf("<html>\n");
+        w.printf("<head>\n");
         String title = String.format("施設基準目次 - %s", callback.共通タイトル());
         Renderer.writeMeta(w, title);
-        w.printf("<link rel='stylesheet' type='text/css' href='%s' />%n", Renderer.CSS_FILE);
-        // w.printf("<script src='%s' type='text/javascript'></script>%n",
+        w.printf("<link rel='stylesheet' type='text/css' href='%s' />\n", Renderer.CSS_FILE);
+        // w.printf("<script src='%s' type='text/javascript'></script>\n",
         // Renderer.ALL_JS);
-        w.printf("<title>%s</title>%n", title);
-        w.printf("</head>%n");
-        w.printf("<body>%n");
-        w.printf("<div id='all'>%n");
+        w.printf("<title>%s</title>\n", title);
+        w.printf("</head>\n");
+        w.printf("<body>\n");
+        w.printf("<div id='all'>\n");
         header(doc.root(), w);
-        w.printf("<p>%s</p>%n", callback.共通タイトル());
-        w.printf("<div id='content'>%n");
-        // w.printf("<ul>%n");
+        w.printf("<p>%s</p>\n", callback.共通タイトル());
+        w.printf("<div id='content'>\n");
+        // w.printf("<ul>\n");
         index(doc.root(), w);
-        // w.printf("</ul>%n");
-        w.printf("</div>%n");
+        // w.printf("</ul>\n");
+        w.printf("</div>\n");
         Renderer.writeShare(w, title, url);
-        w.printf("</div>%n");
+        w.printf("</div>\n");
         endBody(w);
-        w.printf("</body>%n");
-        w.printf("</html>%n");
+        w.printf("</body>\n");
+        w.printf("</html>\n");
     }
 
     private void index(Document doc, File dir) throws IOException {
@@ -153,7 +153,7 @@ public class 施設基準Renderer {
         String number = Renderer.spaces(level) + node.number() + "　";
         int indent = Node.indent(number);
         String para = imageLink(node.header() + node.paragrahText(), node);
-        w.printf("<p id='%s' class='m%d'>%s%s</p>%n",
+        w.printf("<p id='%s' class='m%d'>%s%s</p>\n",
             node.fileName(), indent, number, para);
 //            node.paragrahText());
         for (Node child : node.children())
@@ -163,45 +163,45 @@ public class 施設基準Renderer {
     private void detail(Node node, TextWriter w, int level) throws IOException {
         String number = Renderer.spaces(level) + node.number() + "　";
         int indent = Node.indent(number);
-        w.printf("<p id='%s' class='m%d'>%s%s%s</p>%n", node.fileName(), indent, number, node.header(),
+        w.printf("<p id='%s' class='m%d'>%s%s%s</p>\n", node.fileName(), indent, number, node.header(),
             node.paragrahText());
         for (Node child : node.children())
             detail(child, w, level + 1);
         if (node.tuti() != null) {
-            w.printf("<div id='tuti'>%n");
+            w.printf("<div id='tuti'>\n");
             detailTuti(node.tuti(), w, level, true);
-            w.printf("</div>%n");
+            w.printf("</div>\n");
         }
     }
 
     private void body(Node node, TextWriter w) throws IOException {
         String url = String.format("%s/%s.html", callback.baseUrl(), node.fileName());
-        w.printf("%s%n", Renderer.DOCTYPE);
-        w.printf("<html>%n");
-        w.printf("<head>%n");
+        w.printf("%s\n", Renderer.DOCTYPE);
+        w.printf("<html>\n");
+        w.printf("<head>\n");
         String title = String.format("%s %s - %s", node.number(), node.header(), callback.共通タイトル());
         Renderer.writeMeta(w, title);
-        w.printf("<link rel='stylesheet' type='text/css' href='%s' />%n", Renderer.CSS_FILE);
-        // w.printf("<script src='%s' type='text/javascript'></script>%n",
+        w.printf("<link rel='stylesheet' type='text/css' href='%s' />\n", Renderer.CSS_FILE);
+        // w.printf("<script src='%s' type='text/javascript'></script>\n",
         // Renderer.ALL_JS);
-        w.printf("<title>%s</title>%n", title);
-        w.printf("</head>%n");
-        w.printf("<body>%n");
-        w.printf("<div id='all'>%n");
+        w.printf("<title>%s</title>\n", title);
+        w.printf("</head>\n");
+        w.printf("<body>\n");
+        w.printf("<div id='all'>\n");
         header(node, w);
         String number = node.number() + "　";
         int indent = Node.indent(number);
-        w.printf("<p class='m%d'>%s%s%s</p>%n", indent, number, node.header(), node.paragrahText());
-        w.printf("<div id='content'>%n");
-        w.printf("<ul>%n");
+        w.printf("<p class='m%d'>%s%s%s</p>\n", indent, number, node.header(), node.paragrahText());
+        w.printf("<div id='content'>\n");
+        w.printf("<ul>\n");
         for (Node child : node.children())
             detail(child, w, 0);
-        w.printf("</ul>%n");
-        w.printf("</div>%n");
+        w.printf("</ul>\n");
+        w.printf("</div>\n");
         Renderer.writeShare(w, title, url);
-        w.printf("</div>%n");
-        w.printf("</body>%n");
-        w.printf("</html>%n");
+        w.printf("</div>\n");
+        w.printf("</body>\n");
+        w.printf("</html>\n");
     }
 
     private void body(Node node, File dir) throws IOException {
