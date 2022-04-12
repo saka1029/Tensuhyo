@@ -284,11 +284,11 @@ public class Facade {
 		Document newDoc = newParser.parse(newText, 元号 + 年度 + "医科");
 		Renderer renderer = new Renderer();
 //		renderer.commonTitle = COMMON_TITLE;
-		renderer.区分一覧出力(oldDoc, newDoc, new File(HTMLパス("i") + "/kubun.html"), "../../" + 旧年度 + "i",
+		renderer.区分一覧出力(oldDoc, newDoc, new File(HTMLパス("i") + "/kubun.html"), "../../" + 旧年度 + "/i",
 			new RendererOption() {
 				@Override public String 共通タイトル() { return 元号 + 年度 + "年医科診療報酬点数表"; }
 				@Override public String baseUrl() { return ベースURL("i"); }
-				@Override public String 比較タイトル() { return 旧元号 + 旧年度 + "," + 元号 + 年度 + "年診療報酬点数表"; }
+				@Override public String 比較タイトル() { return 旧元号 + 旧年度 + "年," + 元号 + 年度 + "年診療報酬点数表"; }
                 @Override public void 目次(Node node, TextWriter w) {
                     w.printf("<hr>%n<div id='menu'></div>%n");
                 }
@@ -396,6 +396,27 @@ public class Facade {
 		Sitemap.create(new File(HTMLパス("s")), ベースURL("s"));
 	}
 
+	public void 歯科区分一覧() throws IOException, ParseException {
+		String oldText = TextIO.ReadFrom(テキストパス(旧年度, "s", "告示"), ENCODING);
+		Parser oldParser = new 医科告示読込();
+		Document oldDoc = oldParser.parse(oldText, 旧元号 + 旧年度 + "年歯科");
+
+		String newText = TextIO.ReadFrom(テキストパス(年度, "s", "告示"), ENCODING);
+		Parser newParser = new 医科告示読込();
+		Document newDoc = newParser.parse(newText, 元号 + 年度 + "年歯科");
+
+		Renderer renderer = new Renderer();
+//		renderer.commonTitle = COMMON_TITLE;
+		renderer.区分一覧出力(oldDoc, newDoc, new File(HTMLパス("s") + "/kubun.html"), "../../" + 旧年度 + "/s",
+			new RendererOption() {
+				@Override public String 共通タイトル() { return 元号 + 年度 + "年歯科診療報酬点数表"; }
+				@Override public String baseUrl() { return ベースURL("s"); }
+				@Override public String 比較タイトル() { return 旧元号 + 旧年度 + "年," + 元号 + 年度 + "年歯科診療報酬点数表"; }
+                @Override public void 目次(Node node, TextWriter w) {
+                    w.printf("<hr>%n<div id='menu'></div>%n");
+                }
+            });
+	}
 	static class 歯科別添関数 implements 別添関数 {
         static final String SP = "[\\s　]*";
         static final Pattern HEADER_PAT = Pattern.compile(
@@ -497,5 +518,78 @@ public class Facade {
                 }
 			});
 		Sitemap.create(new File(HTMLパス("t")), ベースURL("t"));
+	}
+ 
+	public void 調剤区分一覧() throws IOException, ParseException {
+		String oldText = TextIO.ReadFrom(テキストパス(旧年度, "t", "告示"), ENCODING);
+		Parser oldParser = new 調剤告示読込();
+		Document oldDoc = oldParser.parse(oldText, 旧元号 + 旧年度 + "年調剤");
+
+		String newText = TextIO.ReadFrom(テキストパス(年度, "t", "告示"), ENCODING);
+		Parser newParser = new 調剤告示読込();
+		Document newDoc = newParser.parse(newText, 元号 + 年度 + "年調剤");
+
+		Renderer renderer = new Renderer();
+//		renderer.commonTitle = COMMON_TITLE;
+		renderer.区分一覧出力(oldDoc, newDoc, new File(HTMLパス("t") + "/kubun.html"), "../../" + 旧年度 + "/t",
+			new RendererOption() {
+				@Override public String 共通タイトル() { return 元号 + 年度 + "年調剤診療報酬点数表"; }
+				@Override public String baseUrl() { return ベースURL("t"); }
+				@Override public String 比較タイトル() { return 旧元号 + 旧年度 + "年," + 元号 + 年度 + "年調剤診療報酬点数表"; }
+                @Override
+                public void 目次(Node node, TextWriter w) {
+                    w.printf("<hr>%n<div id='menu'></div>%n");
+                }
+			});
+	}
+
+    static 別添関数 調剤別添関数 = new 別添関数() {
+        static final String SP = "[\\s　]*";
+        static final Pattern HEADER_PAT = Pattern.compile(
+            "^" + SP + "(?<H>[(（]?" + SP + "(別\\s*紙\\s*様\\s*式)"
+            + SP + "(?<N>[0-9０-９]+)(" + SP + "[の-ー‐－―]" + SP + "(?<D>[0-9０-９]+))?[)）]?)" + SP + "$"
+        );
+        static final Pattern HEADER_TITLE_PAT = Pattern.compile(
+            "^" + SP + "(?<H>[(（]?" + SP + "(別\\s*紙\\s*様\\s*式)"
+            + SP + "(?<N>[0-9０-９]+)(" + SP + "[の-ー‐－―]" + SP + "(?<D>[0-9０-９]+))?[)）]?)"
+            + SP + "(?<T>.*)" + "$"
+        );
+
+        @Override
+        public 別添 eval(String line, String next) {
+            Matcher m = HEADER_PAT.matcher(line);
+            if (m.matches()) {
+                String no = han(m.group("N"));
+                String d = m.group("D");
+                if (d != null) no += "_" + han(d);
+                return new 別添(String.format("BESI%s.pdf", no),
+                    norm(m.group("H")), next.replaceAll("\\s", ""));
+            }
+            m = HEADER_TITLE_PAT.matcher(line);
+            if (m.matches()) {
+                String no = han(m.group("N"));
+                String d = m.group("D");
+                String t = m.group("T");
+                if (d != null) no += "_" + han(d);
+                return new 別添(String.format("BESI%s.pdf", no),
+                    norm(m.group("H")), t.replaceAll("\\s", ""));
+            }
+            return null;
+        }
+    };
+
+	public void 調剤様式() throws IOException, COSVisitorException {
+	    Map<String, 別添> map = new LinkedHashMap<>();
+	    for (String pdfFile : PDFパス("t", 調剤様式PDF)) {
+	        List<別添> list = Pdf.split(pdfFile, true, 4, 10, HTMLパス("t") + "/image", 調剤別添関数);
+	        for (別添 b : list)
+	            map.put(b.pdfFileName, b); // ファイル名をキーとしてマージします。
+	    }
+	    別添Renderer renderer = new 別添Renderer();
+	    renderer.HTML出力(map.values(), new File(HTMLパス("t")), new 別添RendererCallback() {
+            @Override public String 共通タイトル() { return 元号 + 年度 + "年 別紙様式一覧"; }
+            @Override public String ファイル名() { return "yoshiki"; }
+            @Override public String baseUrl() { return ベースURL("t"); }
+        });
 	}
 }
