@@ -20,7 +20,7 @@ public class Sitemap {
 			for (File child : children)
 				create(child, url + "/" + child.getName(), w);
 		} else if (!name.equals("sitemap.xml")) {
-			w.printf("<url><loc>%s</loc></url>%n", url);
+			w.printf("<url><loc>%s</loc></url>\n", url);
 			// 比較ページはsitemapに載せない
 			// if (hikakuUrl != null && !name.equals(HIKAKU_PAGE) && name.endsWith(".html"))
             //     w.printf("<url><loc>%s?%s</loc></url>%n", hikakuUrl, name.replaceFirst("\\.html", ""));
@@ -30,12 +30,11 @@ public class Sitemap {
 	public static void create(File dir, String baseUrl) throws FileNotFoundException {
 	    // String hikakuUrl = new File(dir, HIKAKU_PAGE).exists() ? baseUrl + "/" + HIKAKU_PAGE : null;
 		try (TextWriter w = new TextWriter(new File(dir, "sitemap.xml"))) {
-			w.printf("<?xml version='1.0' encoding='UTF-8'?>%n");
-			w.printf("<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>%n");
+			w.printf("<?xml version='1.0' encoding='UTF-8'?>\n");
+			w.printf("<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\n");
 			create(dir, baseUrl, w);
-			w.printf("</urlset>%n");
+			w.printf("</urlset>\n");
 		}
-		
 	}
 	
 }
