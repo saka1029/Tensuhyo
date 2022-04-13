@@ -101,7 +101,7 @@ public class Pdf {
                 "<g>" +
                 "<rect x='%s' y='%s' width='%s' height='%s' fill-opacity='0' stroke='#f00' stroke-width='0.5' />" +
                 "<text x='%s' y='%s' font-size='%s'>%s</text>" +
-                "</g>%n",
+                "</g>\n",
                 text.getX(), text.getY(), width(), text.getFontSizeInPt(),
                 text.getX(), text.getY() + text.getFontSizeInPt(), text.getFontSizeInPt(), text.getCharacter());
         }
@@ -204,13 +204,13 @@ public class Pdf {
 
         private void debugLine(int pageNo, int lineNo, Line line) {
             info("debugLine: page=%s line=%s max font=%s", pageNo, lineNo, line.maxFontSize);
-            debugWriter.printf("<g id='p%d-%d'>%n", pageNo, lineNo);
+            debugWriter.printf("<g id='p%d-%d'>\n", pageNo, lineNo);
             for (Entry<Float, TreeSet<Text>> t : line.texts.entrySet()) {
                 info("%s=%s", t.getKey(), t.getValue());
                 for (Text e : t.getValue())
                     e.writeSVG();
             }
-            debugWriter.printf("</g>%n");
+            debugWriter.printf("</g>\n");
         }
 
         private void add(int pageNo, List<String> p, Line line, float leftMargin, float fontSize, float rubyRate, EnumSet<Skip> skip, StringFunction mod) {
@@ -237,7 +237,7 @@ public class Pdf {
             float prevPos = 0F;
             Line prevLine = null;
             if (debugWriter != null)
-                debugWriter.printf("<g id='p%s'>%n", pageNo);
+                debugWriter.printf("<g id='p%s'>\n", pageNo);
             for (Entry<Float, Line> e : lines.entrySet()) {
                 float pos = e.getKey();
                 Line line = e.getValue();
@@ -252,7 +252,7 @@ public class Pdf {
             if (prevLine != null)
                 add(pageNo, p, prevLine, leftMargin, fontSize, rubyRate, skip, mod);
             if (debugWriter != null)
-                debugWriter.printf("</g>%n");
+                debugWriter.printf("</g>\n");
         }
 
     }
@@ -342,9 +342,9 @@ public class Pdf {
                 new OutputStreamWriter(
                     new FileOutputStream(debugFile), "utf-8"))) {
                 debugWriter = w;
-                w.printf("<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>%n");
+                w.printf("<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>\n");
                 List<List<String>> r = toStringListInternal(lineHeight, fontSize, rubyRate, skip, mod);
-                w.printf("</svg>%n");
+                w.printf("</svg>\n");
                 return r;
             }
         } else {
@@ -379,12 +379,12 @@ public class Pdf {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("file=%s%n", file));
-        sb.append(String.format("pageSize=%d%n", pages.size()));
-        sb.append(String.format("freqFontSize=%s%n", freqFontSize));
-        sb.append(String.format("freqLineHeight=%s%n", freqLineHeight));
-        sb.append(String.format("most freqFontSize=%s%n", mostFreq(freqFontSize)));
-        sb.append(String.format("most freqLineHeight=%s%n", mostFreq(freqLineHeight)));
+        sb.append(String.format("file=%s\n", file));
+        sb.append(String.format("pageSize=%d\n", pages.size()));
+        sb.append(String.format("freqFontSize=%s\n", freqFontSize));
+        sb.append(String.format("freqLineHeight=%s\n", freqLineHeight));
+        sb.append(String.format("most freqFontSize=%s\n", mostFreq(freqFontSize)));
+        sb.append(String.format("most freqLineHeight=%s\n", mostFreq(freqLineHeight)));
         return sb.toString();
     }
 
@@ -398,10 +398,10 @@ public class Pdf {
                 info("toText: %s", file);
                 List<List<String>> pages = pdf.toStringList(lineHeight, fontSize, rubyRate, skip, mod);
                 for (int i = 0, pageSize = pages.size(); i < pageSize; ++i) {
-                    w.printf("# file: %s page: %d%n", file.getName(), i + 1);
+                    w.printf("# file: %s page: %d\n", file.getName(), i + 1);
                     List<String> lines = pages.get(i);
                     for (int j = 0, lineSize = lines.size(); j < lineSize; ++j)
-                        w.printf("%s%n", lines.get(j));
+                        w.printf("%s\n", lines.get(j));
                 }
             }
         }

@@ -51,10 +51,10 @@ public class R0404 {
                 "000907862.pdf",
         };
         f.施設基準基本様式PDF = new String[] {
-                "000907989-y.pdf", // 別添７
+                "betten/000907989-y.pdf", // 別添７
         };
         f.施設基準特掲様式PDF = new String[] {
-                "000907862-y.pdf", // 別添２
+                "betten/000907862-y.pdf", // 別添２
         };
     }
 

@@ -75,7 +75,7 @@ public class Facade {
     }
 
     String テキストパス(String 点数表, String テキストファイル) {
-        return テキストパス(点数表, 年度, テキストファイル);
+        return テキストパス(年度, 点数表, テキストファイル);
     }
 
     String HTMLパス(String 点数表) {
@@ -233,7 +233,7 @@ public class Facade {
 	    Pdf.toText(PDFパス("i", 医科通知PDF), テキストパス("i", "tuti"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE,
         new StringFunction() {
             @Override public String eval(String line) {
-                return line.matches("^\\s*-\\s*[0-9０-９]+\\s*-\\s*$") ? "#" + line : line;
+                return line.matches("^\\s*.*\\s*-\\s*[0-9０-９]+\\s*-\\s*$") ? "#" + line : line;
             }
 	    });
     }
@@ -269,7 +269,7 @@ public class Facade {
 				@Override public String 比較タイトル() { return "dummy"; }
 				@Override
 				public void 目次(Node node, TextWriter w) {
-					w.printf("<hr>%n<div id='menu'></div>%n");
+					w.printf("<hr>\n<div id='menu'></div>\n");
  				}
 		});
 		Sitemap.create(new File(HTMLパス("i")), ベースURL("i"));
@@ -290,7 +290,7 @@ public class Facade {
 				@Override public String baseUrl() { return ベースURL("i"); }
 				@Override public String 比較タイトル() { return 旧元号 + 旧年度 + "年," + 元号 + 年度 + "年診療報酬点数表"; }
                 @Override public void 目次(Node node, TextWriter w) {
-                    w.printf("<hr>%n<div id='menu'></div>%n");
+                    w.printf("<hr>\n<div id='menu'></div>\n");
                 }
 			});
 	}
@@ -390,7 +390,7 @@ public class Facade {
 				@Override public String 比較タイトル() { return "dummy"; }
 				@Override
 				public void 目次(Node node, TextWriter w) {
-					w.printf("<hr>%n<div id='menu'></div>%n");
+					w.printf("<hr>\n<div id='menu'></div>\n");
 				}
 		});
 		Sitemap.create(new File(HTMLパス("s")), ベースURL("s"));
@@ -413,7 +413,7 @@ public class Facade {
 				@Override public String baseUrl() { return ベースURL("s"); }
 				@Override public String 比較タイトル() { return 旧元号 + 旧年度 + "年," + 元号 + 年度 + "年歯科診療報酬点数表"; }
                 @Override public void 目次(Node node, TextWriter w) {
-                    w.printf("<hr>%n<div id='menu'></div>%n");
+                    w.printf("<hr>\n<div id='menu'></div>\n");
                 }
             });
 	}
@@ -514,7 +514,7 @@ public class Facade {
 				@Override public String 比較タイトル() { return "dummy"; }
                 @Override
                 public void 目次(Node node, TextWriter w) {
-                    w.printf("<hr>%n<div id='menu'></div>%n");
+                    w.printf("<hr>\n<div id='menu'></div>\n");
                 }
 			});
 		Sitemap.create(new File(HTMLパス("t")), ベースURL("t"));
@@ -538,7 +538,7 @@ public class Facade {
 				@Override public String 比較タイトル() { return 旧元号 + 旧年度 + "年," + 元号 + 年度 + "年調剤診療報酬点数表"; }
                 @Override
                 public void 目次(Node node, TextWriter w) {
-                    w.printf("<hr>%n<div id='menu'></div>%n");
+                    w.printf("<hr>\n<div id='menu'></div>\n");
                 }
 			});
 	}
