@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.junit.Test;
-
+import saka1029.tensuhyo.main.Facade;
 import saka1029.tensuhyo.parser.ParseException;
 
 public class H3004 {

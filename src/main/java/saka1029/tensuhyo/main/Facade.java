@@ -1,4 +1,4 @@
-package saka1029.tensuhyo.run;
+package saka1029.tensuhyo.main;
 
 import java.io.File;
 import java.io.IOException;
@@ -220,7 +220,7 @@ public class Facade {
         });
 	}
 
-    void 医科告示変換() throws IOException {
+    public void 医科告示変換() throws IOException {
 	    Pdf.toText(PDFパス("i", 医科告示PDF), テキストパス("i", "kokuji"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE,
         new StringFunction() {
             @Override public String eval(String line) {
@@ -229,7 +229,7 @@ public class Facade {
 	    });
     }
 
-    void 医科通知変換() throws IOException {
+    public void 医科通知変換() throws IOException {
 	    Pdf.toText(PDFパス("i", 医科通知PDF), テキストパス("i", "tuti"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE,
         new StringFunction() {
             @Override public String eval(String line) {
