@@ -6,7 +6,7 @@
 
   <groupId>saka1029.tensuhyo</groupId>
   <artifactId>tensuhyo</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
 
   <name>tensuhyo</name>
   <url>https://github.com/saka1029/Tensuhyo.git</url>
