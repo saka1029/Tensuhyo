@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.logging.Logger;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.apache.pdfbox.exceptions.COSVisitorException;
@@ -15,6 +17,8 @@ import saka1029.tensuhyo.parser.ParseException;
  */
 public class Main {
 
+    static final Logger logger = Logger.getLogger(Main.class.getName());
+
     static String USAGE = "usage java saka1029.tensuhyo.main.Main [-d TOP_DIRECTORY] PDF_CONFIG OPERATION...%n"
         + "  TOP_DIRECTORY: 先頭ディレクトリ%n"
         + "    TOP_DIRECTORY%n"
@@ -23,7 +27,13 @@ public class Main {
         + "          |   +---04 (令和4年)%n"
         + "          |       +---k (施設基準)%n"
         + "          |       |   +---pdf%n"
+        + "          |       |       +---告示.pdf%n"
+        + "          |       |       +---通知.pdf%n"
         + "          |       |   +---txt%n"
+        + "          |       |       +---kokuji.%n"
+        + "          |       |       +---tuti.%n"
+        + "          |       |       +---告示.%n"
+        + "          |       |       +---通知.%n"
         + "          |       +---i (医科)%n"
         + "          |       |   +---pdf%n"
         + "          |       |   +---txt%n"
@@ -44,8 +54,18 @@ public class Main {
         + "    s0 歯科PDF変換%n"
         + "    s1 歯科HTML生成%n"
         + "    t0 調剤PDF変換%n"
-        + "    i1 調剤HTML生成%n"
+        + "    t1 調剤HTML生成%n"
         ;
+
+    static final Map<String, String> STEP_NAME = Map.of(
+        "k0", "施設基準PDF変換",
+        "k1", "施設基準HTML生成",
+        "i0", "医科PDF変換",
+        "i1", "医科HTML生成",
+        "s0", "歯科PDF変換",
+        "s1", "歯科HTML生成",
+        "t0", "調剤PDF変換",
+        "t1", "調剤HTML生成");
 
     static void usage(String message) {
         System.err.println(message);
@@ -58,7 +78,7 @@ public class Main {
         Gson gson = new Gson();
         Facade facade = gson.fromJson(Files.readString(config), Facade.class);
         for (String op : operations) {
-            System.out.println("running " + op + " ...");
+            logger.info("running " + op + ":" + STEP_NAME.get(op) + " ...");
             switch (op) {
             case "k0":
                 facade.施設基準告示変換();
