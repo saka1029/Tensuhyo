@@ -53,12 +53,12 @@ public class Main {
         System.exit(1);
     }
 
-    public static void run(Path config, String... operations) throws JsonSyntaxException, IOException {
+    public static void run(Path config, String... operations)
+        throws JsonSyntaxException, IOException, ParseException, COSVisitorException {
         Gson gson = new Gson();
         Facade facade = gson.fromJson(Files.readString(config), Facade.class);
         for (String op : operations) {
             System.out.println("op=" + op);
-            /*
             switch (op) {
             case "k0":
                 facade.施設基準告示変換();
@@ -101,7 +101,6 @@ public class Main {
                 System.exit(2);
                 break;
             }
-            */
         }
     }
 

@@ -62,7 +62,7 @@ public class Facade {
 
     static final String ENCODING = "UTF-8";
 
-	static { Common.config(); }
+	// static { Common.config(); }
 
     String[] PDFパス(String 点数表, String[] pdfs) {
         return Arrays.stream(pdfs)
