@@ -58,7 +58,7 @@ public class Main {
         Gson gson = new Gson();
         Facade facade = gson.fromJson(Files.readString(config), Facade.class);
         for (String op : operations) {
-            System.out.println("op=" + op);
+            System.out.println("running " + op + " ...");
             switch (op) {
             case "k0":
                 facade.施設基準告示変換();
