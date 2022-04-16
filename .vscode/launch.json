@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "saka1029.tensuhyo.main.Main",
             "projectName": "tensuhyo",
-            "args": "r0404.json k0 k1"
+            "args": "r0404.json k0"
         }
     ]
 }

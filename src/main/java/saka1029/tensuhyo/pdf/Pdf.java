@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -16,7 +17,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-// import java.util.logging.Logger;
+import java.util.logging.Logger;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -28,11 +29,13 @@ import saka1029.tensuhyo.util.TextWriter;
 
 public class Pdf {
 
-    // private static Logger logger = Logger.getLogger(Pdf.class.getName());
+    private static Logger logger = Logger.getLogger(Pdf.class.getName());
     private static void info(String format, Object... args) {
-//        logger.info(String.format(format, args));
+       logger.info(String.format(format, args));
     }
-//    private static void fine(String format, Object... args) { logger.fine(String.format(format, args)); }
+   private static void fine(String format, Object... args) {
+       logger.fine(String.format(format, args));
+    }
 
     public class PageLine {
         public int page, line;
@@ -162,7 +165,7 @@ public class Pdf {
                 String last = null;
                 for (Text t : v)
                     if (skip.contains(Skip.Text) && t.fontSize() <= rubySize)
-                        info("skip text: page=%s line=%s : %s", pageNo, lineNo, t);
+                        fine("skip text: page=%s line=%s : %s", pageNo, lineNo, t);
                     else
                         sb.append(last = t.text());
                 prev = k + lastSize(last, fontSize) + half;
@@ -203,10 +206,10 @@ public class Pdf {
         }
 
         private void debugLine(int pageNo, int lineNo, Line line) {
-            info("debugLine: page=%s line=%s max font=%s", pageNo, lineNo, line.maxFontSize);
+            fine("debugLine: page=%s line=%s max font=%s", pageNo, lineNo, line.maxFontSize);
             debugWriter.printf("<g id='p%d-%d'>\n", pageNo, lineNo);
             for (Entry<Float, TreeSet<Text>> t : line.texts.entrySet()) {
-                info("%s=%s", t.getKey(), t.getValue());
+                fine("%s=%s", t.getKey(), t.getValue());
                 for (Text e : t.getValue())
                     e.writeSVG();
             }
@@ -218,7 +221,7 @@ public class Pdf {
             float rubySize = fontSize * rubyRate;
             // 行全体がルビなら無視します。
             if (skip.contains(Skip.Line) && line.maxFontSize <= rubySize)
-                info("skip line: page=%s line=%s : %s", pageNo, lineNo, line);
+                fine("skip line: page=%s line=%s : %s", pageNo, lineNo, line);
             else {
                 String s = line.toString(pageNo, lineNo, leftMargin, fontSize, rubyRate, skip);
                 s = mod.eval(s);
@@ -391,11 +394,20 @@ public class Pdf {
     public static void toText(String[] pdfs, String out, boolean horizontal,
         float lineHeight, float fontSize, float rubyRate, EnumSet<Skip> skip, StringFunction mod)
             throws IOException {
+        info("Pdf.toText:");
+        info("  pdfs=%s", Arrays.toString(pdfs));
+        info("  out=%s", out);
+        info("  horizontal=%s", horizontal);
+        info("  lineHeight=%s", lineHeight);
+        info("  fontSize=%s", fontSize);
+        info("  rubyRate=%s", rubyRate);
+        info("  skip=%s", skip);
+        info("  StringFunction=%s", mod);
         try (TextWriter w = new TextWriter(new OutputStreamWriter(new FileOutputStream(out), "UTF-8"))) {
             for (String fileName : pdfs) {
                 File file = new File(fileName);
                 Pdf pdf = new Pdf(fileName, horizontal);
-                info("toText: %s", file);
+                fine("toText: %s", file);
                 List<List<String>> pages = pdf.toStringList(lineHeight, fontSize, rubyRate, skip, mod);
                 for (int i = 0, pageSize = pages.size(); i < pageSize; ++i) {
                     w.printf("# file: %s page: %d\n", file.getName(), i + 1);
@@ -416,7 +428,7 @@ public class Pdf {
         sp.setStartPage(startPage);
         sp.setEndPage(endPage);
         sp.setSplitAtPage(doc.getNumberOfPages());
-        info("write page %d-%d to %s header=%s title=%s", startPage, endPage, outFile, b.header, b.title);
+        fine("write page %d-%d to %s header=%s title=%s", startPage, endPage, outFile, b.header, b.title);
         list.add(b);
         List<PDDocument> splits = sp.split(doc);
         try {
