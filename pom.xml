@@ -19,6 +19,8 @@
     <maven.test.skip>true</maven.test.skip>
   </properties>
 
+  <!-- 依存関係のjarファイルは以下のコマンドで取得する -->
+  <!-- mvn dependency:copy-dependencies -DoutputDirectory=lib -->
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -47,6 +49,12 @@
       <artifactId>jsoup</artifactId>
       <!-- セキュリティの問題対策で1.8.3から変更 -->
       <version>1.14.3</version>
+    </dependency>
+    <!-- saka1029.tensuhyo.main.Mainで使用 -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.9.0</version>
     </dependency>
   </dependencies>
 
@@ -94,28 +102,5 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-            <execution>
-                <phase>package</phase>
-                <goals>
-                    <goal>single</goal>
-                </goals>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>saka1029.tensuhyo.main.Main</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </execution>
-        </executions>
-    </plugin>
-  </plugins>
   </build>
 </project>
