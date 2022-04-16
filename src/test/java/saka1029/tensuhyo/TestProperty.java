@@ -4,7 +4,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 import com.google.gson.Gson;
 import org.junit.Test;
@@ -76,6 +77,18 @@ public class TestProperty {
         Gson gson = new Gson();
         Facade facade = gson.fromJson(json, Facade.class);
         assertEquals("令和", facade.元号);
+        assertArrayEquals(new String[] {"000907845.pdf", "000908781.pdf"}, facade.施設基準告示PDF);
+    }
+
+    @Test
+    public void testReadFile() throws IOException {
+        Gson gson = new Gson();
+        String json = Files.readString(Paths.get("r0404.json"));
+        Facade facade = gson.fromJson(json, Facade.class);
+        assertEquals("令和", facade.元号);
+        assertEquals("04", facade.年度);
+        assertEquals("令和", facade.旧元号);
+        assertEquals("02", facade.旧年度);
         assertArrayEquals(new String[] {"000907845.pdf", "000908781.pdf"}, facade.施設基準告示PDF);
     }
 
