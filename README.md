@@ -74,6 +74,7 @@ mvn dependency:copy-dependencies -DoutputDirectory=lib
 ### テキストファイルへの変換
 ### 変換されたテキストファイルのコピー
 ### HTML/PDFの生成
+### index.htmlの編集
 
 ## ファイルのアップロード
 環境変数FTP_CONFIGにアップロード先のホスト名、FTPユーザ名、パスワードを設定します。
