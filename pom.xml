@@ -40,14 +40,6 @@
         <artifactId>commons-net</artifactId>
         <version>3.3</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
-    <!-- 厚生労働省のホームページをチェックするために使用 -->
-    <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <!-- セキュリティの問題対策で1.8.3から変更 -->
-      <version>1.14.3</version>
-    </dependency>
     <!-- saka1029.tensuhyo.main.Mainで使用 -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
