@@ -76,3 +76,8 @@ mvn dependency:copy-dependencies -DoutputDirectory=lib
 ### HTML/PDFの生成
 
 ## ファイルのアップロード
+環境変数FTP_CONFIGにアップロード先のホスト名、FTPユーザ名、パスワードを設定します。
+Windowsの場合は以下のように設定します。
+```
+set FTP_CONFIG=HOST USER PASSWORD
+```
