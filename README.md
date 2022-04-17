@@ -82,3 +82,9 @@ Windowsの場合は以下のように設定します。
 ```
 set FTP_CONFIG=HOST USER PASSWORD
 ```
+
+## カスタマイズ
+### Google Analyticsトラッキングコードの変更
+
+Google AnalyticsのトラッキングコードはすべてのHTMLページに埋め込む必要がありますが、これは`Renderer.googleAnalytics()`で行っています。
+独自のサイトを立ち上げる場合はこれを変更します。
