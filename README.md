@@ -7,11 +7,8 @@
 開発はVSCodeを使用していますが、これが必須というわけではありません。JDK(Java)とMaven、それとテキストエディタがあれば十分です。
 
 
-### JDKインストール
-
-### Mavenインストール
-
-### このプロジェクトのダウンロード
+### このプロジェクトのクローン
+このプロジェクトのクローンを作成します。
 
 
 ### プロジェクトのビルド
@@ -50,8 +47,8 @@ mvn dependency:copy-dependencies -DoutputDirectory=lib
           |   +---04 (令和4年)
           |       +---k (施設基準)
           |       |   +---pdf
-          |       |       +---告示.pdf
-          |       |       +---通知.pdf
+          |       |   |   +---告示.pdf
+          |       |   |   +---通知.pdf
           |       |   +---txt
           |       |       +---kokuji.txt
           |       |       +---tuti.txt
@@ -63,11 +60,23 @@ mvn dependency:copy-dependencies -DoutputDirectory=lib
           |       +---s (歯科)
           |       |   +---pdf
           |       |   +---txt
-          |       +---s (調剤)
+          |       +---t (調剤)
           |           +---pdf
           |           +---txt
           +---web
               +---04 (令和4年)
+          |       +---k (施設基準)
+          |       |   +---index.html
+          |       |   +---.....
+          |       +---i (医科)
+          |       |   +---index.html
+          |       |   +---.....
+          |       +---s (歯科)
+          |       |   +---index.html
+          |       |   +---.....
+          |       +---t (調剤)
+          |       |   +---index.html
+          |       |   +---.....
 ```
 ### 生成順序
 ### PDFファイルのダウンロード
@@ -79,12 +88,6 @@ mvn dependency:copy-dependencies -DoutputDirectory=lib
 ## ファイルのアップロード
 環境変数FTP_CONFIGにアップロード先のホスト名、FTPユーザ名、パスワードを設定します。
 Windowsの場合は以下のように設定します。
-```
+````
 set FTP_CONFIG=HOST USER PASSWORD
-```
-
-## カスタマイズ
-### Google Analyticsトラッキングコードの変更
-
-Google AnalyticsのトラッキングコードはすべてのHTMLページに埋め込む必要がありますが、これは`Renderer.googleAnalytics()`で行っています。
-独自のサイトを立ち上げる場合はこれを変更します。
+``
