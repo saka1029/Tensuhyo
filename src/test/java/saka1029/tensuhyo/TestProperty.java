@@ -7,11 +7,14 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Logger;
 import com.google.gson.Gson;
 import org.junit.Test;
 import saka1029.tensuhyo.main.Facade;
 
 public class TestProperty {
+
+    static Logger logger = Logger.getLogger(TestProperty.class.getName());
 
     @Test
     public void testMultiline() throws IOException {
@@ -19,7 +22,7 @@ public class TestProperty {
             + "a=a0,\\\n"
             + "  a1,\\\n"
             + "  a2";
-        System.out.println(in);
+        logger.info(in);
         Properties prop = new Properties();
         prop.load(new StringReader(in));
         assertEquals("a0,a1,a2", prop.getProperty("a"));
