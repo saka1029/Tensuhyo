@@ -91,3 +91,9 @@ Windowsの場合は以下のように設定します。
 ````
 set FTP_CONFIG=HOST USER PASSWORD
 ``
+
+## カスタマイズ
+# Google Analyticsトラッキングコードの変更
+Google Analyticsのトラッキングコードはリソース
+saka1029.tensuhyo.generator.GoogleAnalyticsTrackingCode.txt
+をコピーしているので、これを変更すればよい。
