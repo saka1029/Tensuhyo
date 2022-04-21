@@ -1,12 +1,15 @@
 package saka1029.tensuhyo.generator;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -39,23 +42,43 @@ public class Renderer {
 
 	private RendererOption callback = null;
 
+	static String GOOGLE_ANALYTICS_TRACKING_CODE_FILE = "GoogleAnalyticsTrackingCode.txt";
+	static String GOOGLE_ANALYTICS_TRACKING_CODE;
+	static {
+		StringBuilder sb = new StringBuilder();
+		try (InputStream is = Renderer.class.getResourceAsStream(GOOGLE_ANALYTICS_TRACKING_CODE_FILE);
+			InputStreamReader ir = new InputStreamReader(is, StandardCharsets.UTF_8);
+			BufferedReader br = new BufferedReader(ir);) {
+			while (true) {
+				String line = br.readLine();
+				if (line == null)
+					break;
+				sb.append(line).append("\n");
+			}
+			GOOGLE_ANALYTICS_TRACKING_CODE = sb.toString();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static void googleAnalytics(TextWriter w) {
-		w.printf("<script type='text/javascript'>\n");
-		w.printf("\n");
-		w.printf("  var _gaq = _gaq || [];\n");
-		w.printf("  _gaq.push(['_setAccount', 'UA-37161278-1']);\n");
-		w.printf("  _gaq.push(['_trackPageview']);\n");
-		w.printf("\n");
-		w.printf("  (function() {\n");
-		w.printf("    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n");
-		// 標準のGoogleアナリティクスのコード
-		w.printf("    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n");
-		// ユーザー属性とインタレスト カテゴリに関するレポート
-//		w.printf("    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';\n");
-		w.printf("    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n");
-		w.printf("  })();\n");
-		w.printf("\n");
-		w.printf("</script>\n");
+		w.printf("%s", GOOGLE_ANALYTICS_TRACKING_CODE);
+// 		w.printf("<script type='text/javascript'>\n");
+// 		w.printf("\n");
+// 		w.printf("  var _gaq = _gaq || [];\n");
+// 		w.printf("  _gaq.push(['_setAccount', 'UA-37161278-1']);\n");
+// 		w.printf("  _gaq.push(['_trackPageview']);\n");
+// 		w.printf("\n");
+// 		w.printf("  (function() {\n");
+// 		w.printf("    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n");
+// 		// 標準のGoogleアナリティクスのコード
+// 		w.printf("    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n");
+// 		// ユーザー属性とインタレスト カテゴリに関するレポート
+// //		w.printf("    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';\n");
+// 		w.printf("    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n");
+// 		w.printf("  })();\n");
+// 		w.printf("\n");
+// 		w.printf("</script>\n");
 	}
 	public static void writeMeta(TextWriter w, String description) {
 		w.printf("<meta charset='%s'>\n", HTML_ENCODING);
