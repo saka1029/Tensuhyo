@@ -1,3 +1,5 @@
 target/
 lib/
-logging.*
+.settings/
+.classpath
+.project
