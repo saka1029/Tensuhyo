@@ -20,7 +20,7 @@
     historyMenu += " | ";
 //  historyMenu += link= + path.replace(/(\/\d\d\/.\/)(.*)\.html/, "$1hikaku.html?$2") + "'>比較</a>";
     const rightYear = path.replace(/.*\/(\d\d)\/.*/, "$1");
-    const nendoArray = ["平成26", "平成28", "平成30", "令和01", "令和02", "令和04"];
+    const nendoArray = ["平成30", "令和01", "令和02", "令和04"];
     const nendoNew = "令和04";
     nendoArray.forEach(n => {
         const y = n.substring(n.length - 2);
