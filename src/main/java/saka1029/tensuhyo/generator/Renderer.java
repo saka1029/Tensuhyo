@@ -430,6 +430,8 @@ public class Renderer {
 
 	private boolean writeLink(Node child, TextWriter w) {
 		if (hasInfo(child)) {
+			if (child.fileName().equals("0.1.2.2.T"))
+				System.out.println(child);
 			w.printf("<li class='m%d'><a href='%s.html'>%s　%s</a></li>\n",
 				Node.indent(child.number()) + 2,
 				child.fileName(), child.number(), child.simpleHeader());
