@@ -179,9 +179,12 @@ public class Converter {
 			else {
 				logger.warning(String.format(
 					"参照された通知%s 告示=%s", e.getValue().toLongString(), parent));
-				Node child = 通則_告示.value.match("通則", parent.lineNo());
-				parent.addFirst(child);
-				child.tuti(e.getValue());
+				// 既に通則が先頭にあれば追加しない。
+				if (parent.childrenSize() <= 0 || !parent.children(0).name().equals("通則")) {
+                    Node child = 通則_告示.value.match("通則", parent.lineNo());
+                    parent.addFirst(child);
+                    child.tuti(e.getValue());
+				}
 			}
 
 		}
