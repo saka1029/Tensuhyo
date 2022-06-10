@@ -713,13 +713,13 @@ public class Renderer {
 		List<Node> oldKubun = 区分番号抽出(oldDoc);
 		List<Node> newKubun = 区分番号抽出(newDoc);
 		TreeMap<String, Pair> map = map(oldKubun, newKubun);
-		TextWriter w = new TextWriter(outFile);
+		TextWriter w = new TextWriter(outFile, HTML_ENCODING);
 		try {
 			区分一覧出力(newDoc.root().children(0), map, oldBaseUrl, w);
 		} finally {
 			w.close();
 		}
-		TextWriter x = new TextWriter(new File(outFile.getParentFile(), HIKAKU_PAGE));
+		TextWriter x = new TextWriter(new File(outFile.getParentFile(), HIKAKU_PAGE), HTML_ENCODING);
 		try {
 			比較ページ出力(oldBaseUrl, x);
 		} finally {

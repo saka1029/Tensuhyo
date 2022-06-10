@@ -53,7 +53,7 @@ public class 別添Renderer {
     public void HTML出力(Collection<別添> list, File dir, 別添RendererCallback callback) throws IOException {
         if (!dir.exists()) dir.mkdirs();
         this.callback = callback;
-        try (TextWriter w = new TextWriter(new File(dir, callback.ファイル名() + ".html"))) {
+        try (TextWriter w = new TextWriter(new File(dir, callback.ファイル名() + ".html"), Renderer.HTML_ENCODING)) {
             本文(list, w);
         }
     }
