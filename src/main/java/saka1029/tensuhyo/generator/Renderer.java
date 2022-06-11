@@ -323,7 +323,7 @@ public class Renderer {
 //	    w.printf("</div>\n");
 	}
 
-	private void endBody(TextWriter w) throws IOException {
+	private void makeMenu(TextWriter w) throws IOException {
 	    w.printf("<script type='text/javascript' src='../../js/menu.js'></script>\n");
 	}
 
@@ -359,7 +359,7 @@ public class Renderer {
 			w.printf("</div>\n");
 			writeShare(w, title, url);
 			w.printf("</div>\n");
-			endBody(w);
+			makeMenu(w);
 			w.printf("</body>\n");
 			w.printf("</html>\n");
 		} finally {
@@ -410,7 +410,7 @@ public class Renderer {
 			w.printf("</div>\n");
 			writeShare(w, title, url);
 			w.printf("</div>\n");
-			endBody(w);
+			makeMenu(w);
 			w.printf("</body>\n");
 			w.printf("</html>\n");
 		} finally {
@@ -483,7 +483,7 @@ public class Renderer {
 			w.printf("</div>\n");
 			writeShare(w, title, url);
 			w.printf("</div>\n");
-			endBody(w);
+			makeMenu(w);
 			w.printf("</body>\n");
 			w.printf("</html>\n");
 		} finally {
@@ -631,6 +631,7 @@ public class Renderer {
 		w.printf("<body>\n");
 		w.printf("<div id='all'>\n");
 		目次(root, w);
+		makeMenu(w);
 		w.printf("<div id='content'>\n");
 		String oldPrefix = oldBaseUrl.substring(oldBaseUrl.length() - 4) + "/";
 		String newPrefix = baseUrl.substring(baseUrl.length() - 4) + "/";
@@ -656,7 +657,6 @@ public class Renderer {
 		w.printf("</div>\n");
 		writeShare(w, title, url);
 		w.printf("</div>\n");
-		endBody(w);
 		w.printf("</body>\n");
 		w.printf("</html>\n");
 	}
