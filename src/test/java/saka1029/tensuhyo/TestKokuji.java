@@ -40,19 +40,39 @@ public class TestKokuji {
         }
         return result;
     }
+    
+    static String norm(String title) {
+        return title
+            .replace("二十五対一", "25対１")
+            .replace("七十五対一", "75対１")
+            .replace("十三対一", "13対１")
+            .replace("十五対一", "15対１")
+            .replace("十六対一", "16対１")
+            .replace("十八対一", "18対１")
+            .replace("二十対一", "20対１")
+            .replace("三十対一", "30対１")
+            .replace("四十対一", "40対１")
+            .replace("五十対一", "50対１")
+            .replace("百対一", "100対１")
+            .replace("十対一", "10対１");
+    }
 
     @Test
     public void testTitles() throws IOException {
         List<String> ks = titles(KOKUJI);
         List<String> ts = titles(TUTI);
         Map<String, String> map = new TreeMap<>();
-        for (String t : ks)
+        for (String t : ks) {
+            t = norm(t);
             map.put(t, "告示");
-        for (String t : ts)
+        }
+        for (String t : ts) {
+            t = norm(t);
             if (map.containsKey(t))
                 map.put(t, "両方");
             else
                 map.put(t, "通知");
+        }
         for (Entry<String, String> e : map.entrySet())
             out.printf("%s %s%n", e.getValue(), e.getKey());
     }
@@ -60,7 +80,7 @@ public class TestKokuji {
     static final String マスタファイル仕様PDF = "data/in/04/k/pdf/master_2_20220930.pdf";
     static final String マスタファイル仕様TXT = "data/in/04/k/txt/master_spec.txt";
 
-    @Test
+//    @Test
     public void test施設基準コード() throws IOException {
         Pdf pdf = new Pdf(マスタファイル仕様PDF, true);
         List<List<String>> pages = pdf.toStringList(5.0F, 10.0F, 0.5F, Pdf.Skip.LINE,
@@ -69,7 +89,7 @@ public class TestKokuji {
             out.println(line);
     }
     
-    @Test
+//    @Test
     public void testNum() throws IOException {
         try (BufferedReader reader = Files.newBufferedReader(Path.of("data/in/04/k/txt/施設基準コード.txt"));
             FileOutputStream fos = new FileOutputStream("data/in/04/k/txt/施設基準コード.csv");
