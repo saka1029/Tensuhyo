@@ -1,0 +1,86 @@
+package saka1029.tensuhyo;
+
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.junit.Test;
+
+import saka1029.tensuhyo.pdf.Pdf;
+
+public class TestKokuji {
+    
+    static final PrintWriter out = new PrintWriter(System.out, true, StandardCharsets.UTF_8);
+    static final Path KOKUJI = Path.of("data/in/04/k/txt/kokuji.txt");
+    static final Path TUTI = Path.of("data/in/04/k/txt/tuti.txt");
+    static final Pattern TITLE = Pattern.compile("^\\s*(\\S+)\\s+(\\S+の施設基準)\\s*");
+
+    static List<String> titles(Path file) throws IOException {
+        List<String> result = new ArrayList<>();
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            for (;;) {
+                String line = reader.readLine();
+                if (line == null)
+                    break;
+                Matcher matcher = TITLE.matcher(line);
+                if (matcher.matches())
+                    result.add(matcher.group(2));
+            }
+        }
+        return result;
+    }
+
+    @Test
+    public void testTitles() throws IOException {
+        List<String> ks = titles(KOKUJI);
+        List<String> ts = titles(TUTI);
+        Map<String, String> map = new TreeMap<>();
+        for (String t : ks)
+            map.put(t, "告示");
+        for (String t : ts)
+            if (map.containsKey(t))
+                map.put(t, "両方");
+            else
+                map.put(t, "通知");
+        for (Entry<String, String> e : map.entrySet())
+            out.printf("%s %s%n", e.getValue(), e.getKey());
+    }
+    
+    static final String マスタファイル仕様PDF = "data/in/04/k/pdf/master_2_20220930.pdf";
+    static final String マスタファイル仕様TXT = "data/in/04/k/txt/master_spec.txt";
+
+    @Test
+    public void test施設基準コード() throws IOException {
+        Pdf pdf = new Pdf(マスタファイル仕様PDF, true);
+        List<List<String>> pages = pdf.toStringList(5.0F, 10.0F, 0.5F, Pdf.Skip.LINE,
+            line -> line.matches("^\\s*-\\s*[0-9０-９]+\\s*-\\s*$") ? null : line);
+        for (String line : pages.get(30))
+            out.println(line);
+    }
+    
+    @Test
+    public void testNum() throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(Path.of("data/in/04/k/txt/施設基準コード.txt"));
+            FileOutputStream fos = new FileOutputStream("data/in/04/k/txt/施設基準コード.csv");
+            PrintWriter writer = new PrintWriter(fos, false, StandardCharsets.UTF_8)) {
+            for (;;) {
+                String line = reader.readLine();
+                if (line == null)
+                    break;
+                String[] fs = line.split(",", 2);
+                writer.printf("\"%04d\",\"%s\"\r\n", Integer.parseInt(fs[0]), fs[1]);
+            }
+        }
+    }
+}
