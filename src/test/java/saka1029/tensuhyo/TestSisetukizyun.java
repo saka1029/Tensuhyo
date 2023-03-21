@@ -19,7 +19,7 @@ import org.junit.Test;
 
 import saka1029.tensuhyo.pdf.Pdf;
 
-public class TestKokuji {
+public class TestSisetukizyun  {
     
     static final PrintWriter out = new PrintWriter(System.out, true, StandardCharsets.UTF_8);
     static final Path KOKUJI = Path.of("data/in/04/k/txt/kokuji.txt");
