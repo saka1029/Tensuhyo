@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 import saka1029.tensuhyo.pdf.Pdf;
+import saka1029.tensuhyo.pdf.StringFunction;
 
 public class TestKokuji {
     
@@ -103,4 +104,39 @@ public class TestKokuji {
             }
         }
     }
+
+    static String pdfPath = "data/in/04/k/pdf/";
+    static String[] kokujiPDF = {
+//        pdfPath + "000907845.pdf",
+        pdfPath + "000908781.pdf"
+    };
+
+	public static void 施設基準告示変換() throws IOException {
+//	    Pdf.toText(kokujiPDF, "data/in/04/k/txt/kokujiText.txt", false, 22F, 14F, 0.5F, Pdf.Skip.TEXT,
+	    Pdf.toText(kokujiPDF, "data/in/04/k/txt/kokujiText.txt", false, 22F, 14F, 0.5F, Pdf.Skip.TEXT,
+        new StringFunction() {
+            @Override public String eval(String line) {
+                return line.matches("^\\s*[〇一二三四五六七八九]+頁\\s*$") ? "#" + line : line.replaceAll("\\s－", "－");
+            }
+	    });
+	}
+	
+	@Test
+	public void test施設基準告示変換() throws IOException {
+	    施設基準告示変換();
+	}
+	
+	@Test
+	public void testPDF() throws IOException {
+	    Pdf pdf = new Pdf(pdfPath + "000908781.pdf", false);
+	    pdf.addDebugLine(96, 13);
+	    pdf.addDebugLine(96, 14);
+	    pdf.addDebugLine(96, 15);
+	    pdf.addDebugLine(96, 16);
+	    pdf.addDebugLine(96, 17);
+	    List<List<String>> s = pdf.toStringList(22F, 14F, 0.5F, Pdf.Skip.TEXT, x -> x);
+	    out.println(s);
+	}
+	
+	
 }
