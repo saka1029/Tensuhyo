@@ -9,6 +9,6 @@ public class Coco索引 {
     static final Logger logger = Logger.getLogger(Coco索引.class.getName());
     
 	void add(String name, Node node, String type, String href) {
-	    logger.info(String.format("Coco索引: %s %s %s", name, type, href));
+//	    logger.info(String.format("Coco索引: %s %s %s", name, type, href));
 	}
 }
