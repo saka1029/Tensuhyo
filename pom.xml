@@ -46,6 +46,14 @@
       <artifactId>gson</artifactId>
       <version>2.9.0</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+    <!-- PDFをテキストに変換するため、PDFファイルを分割するために使用 -->
+    <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>itextpdf</artifactId>
+        <version>5.5.13.3</version>
+    </dependency>
+
   </dependencies>
 
   <build>
