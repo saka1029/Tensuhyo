@@ -278,7 +278,7 @@ public class IText {
                         if (m.matches()) {
                         	if (name != null)
 								writer.printf("%s,%s,%d,%d,%s%s", name, id, startPage, i, title, 改行文字);
-                            name = m.group(1).replaceAll("\\s+", "");
+                            name = m.group(1);
                             id = m.group(2);
                             startPage = i + 1;
                             for (int k = 3; k <= 5 && m.group(k) != null; ++k)
