@@ -9,8 +9,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.itextpdf.text.DocumentException;
-
+import org.apache.pdfbox.exceptions.COSVisitorException;
 import saka1029.tensuhyo.parser.ParseException;
 
 /**
@@ -75,7 +74,7 @@ public class Main {
     }
 
     public static void run(Path config, String... operations)
-        throws JsonSyntaxException, IOException, ParseException, DocumentException {
+        throws JsonSyntaxException, IOException, ParseException, COSVisitorException {
         Gson gson = new Gson();
         Facade facade = gson.fromJson(Files.readString(config), Facade.class);
         for (String op : operations) {
@@ -84,8 +83,6 @@ public class Main {
             case "k0":
                 facade.施設基準告示変換();
                 facade.施設基準通知変換();
-                facade.施設基準基本様式変換();
-                facade.施設基準特掲様式変換();
                 break;
             case "k1":
                 facade.施設基準HTML変換();
@@ -95,7 +92,6 @@ public class Main {
             case "i0":
                 facade.医科告示変換();
                 facade.医科通知変換();
-                facade.医科様式変換();
                 break;
             case "i1":
                 facade.医科HTML変換();
@@ -105,7 +101,6 @@ public class Main {
             case "s0":
                 facade.歯科告示変換();
                 facade.歯科通知変換();
-                facade.歯科様式変換();
                 break;
             case "s1":
                 facade.歯科HTML変換();
@@ -115,7 +110,6 @@ public class Main {
             case "t0":
                 facade.調剤告示変換();
                 facade.調剤通知変換();
-                facade.調剤様式変換();
                 break;
             case "t1":
                 facade.調剤HTML変換();
@@ -130,7 +124,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws JsonSyntaxException, IOException, ParseException, DocumentException {
+    public static void main(String[] args) throws JsonSyntaxException, IOException, ParseException, COSVisitorException {
         Path top = Paths.get(".");
         int max = args.length, i = 0;
         for ( ; i < max; ++i) {
