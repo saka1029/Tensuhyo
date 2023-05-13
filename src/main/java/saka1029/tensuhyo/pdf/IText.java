@@ -173,13 +173,6 @@ public class IText {
         return new 文書属性(horizontal, 左余白, 行間隔, 行高さ, 行併合範囲, ルビ高);
 	}
 
-	/**
-	 * 1行を表すElementのリストを文字列に変換します。
-	 * @param line Elementのリストを指定します。
-	 * @param leftMargin 行先頭の無視するx座標値を指定します。
-	 * @param charWidth 平均的な1文字の幅を指定します。
-	 * @return Elementを連結した文字列を返します。
-	 */
 	String toString(TreeSet<Element> line, float leftMargin, float charWidth) {
 		StringBuilder sb = new StringBuilder();
 		float halfWidth = charWidth / 2;

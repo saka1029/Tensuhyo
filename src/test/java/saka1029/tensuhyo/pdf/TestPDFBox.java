@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
@@ -41,12 +42,19 @@ public class TestPDFBox {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testSimpleStripper() throws IOException {
 //		Path inPdf = Path.of("data/in/04/k/pdf/000907845.pdf");	// 施設基準告示
 		Path inPdf = Path.of("data/in/04/k/pdf/000907862.pdf"); // 施設基準通知
 		Path outText = Path.of("test-data", inPdf.getFileName() + ".txt");
 		Files.createDirectories(outText.getParent());
 		strip(outText.toString(), inPdf.toString());
+	}
+	
+	@Test
+	public void testRead() throws IOException {
+		Files.createDirectories(Path.of("test-data"));
+		new PDFBox(false).テキスト変換("test-data/04kokuji.txt", "data/in/04/k/pdf/000907845.pdf");
+		new PDFBox(true).テキスト変換("test-data/04tuti.txt", "data/in/04/k/pdf/000907862.pdf");
 	}
 }
