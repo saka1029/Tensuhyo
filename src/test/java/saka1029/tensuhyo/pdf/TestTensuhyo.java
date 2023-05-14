@@ -132,7 +132,7 @@ public class TestTensuhyo {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void testCopyOld() throws IOException {
 		copyOldPdf();
 		copyOldTxt();
