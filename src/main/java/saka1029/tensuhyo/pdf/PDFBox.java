@@ -37,12 +37,13 @@ public class PDFBox {
 
     public final boolean horizontal;
 
-    public float 行併合範囲割合 = 0.8F;
+    public float 行併合範囲割合 = 0.29F;
     public float ルビ割合 = 0.6F;
     public float 行高さ規定値 = 10F;
     public float 行間隔規定値 = 14F;
     public Pattern ルビパターン = Pattern.compile("\\p{IsHiragana}*");
     public Pattern ページ番号パターン = Pattern.compile("^\\s*\\S*\\s*-\\s*\\d+\\s*-\\s*$");
+    public DebugElement debugElement = null;
 
     public PDFBox(boolean horizontal) {
         this.horizontal = horizontal;
@@ -54,6 +55,10 @@ public class PDFBox {
             return "%sx%s:%s:%s".formatted(x, y, fontSize, text);
         }
     }
+
+	public interface DebugElement {
+		void element(String path, int pageNo, int lineNo, 文書属性 attr, TreeSet<Element> elements);
+	}
 
     static final Comparator<Element> 行内ソート = Comparator.comparing(Element::x)
         .thenComparing(Comparator.comparing(Element::y).reversed());
@@ -98,7 +103,7 @@ public class PDFBox {
             .max(Entry.comparingByValue())
             .map(Entry::getKey)
             .orElse(行高さ規定値);
-        float 行併合範囲 = 行高さ * 行併合範囲割合;
+        float 行併合範囲 = 行間隔 * 行併合範囲割合;
         float ルビ高さ = 行高さ * ルビ割合;
         return new 文書属性(horizontal, 左余白, 行間隔, 行高さ, 行併合範囲, ルビ高さ);
     }
@@ -148,8 +153,8 @@ public class PDFBox {
     void addLine(List<String> list, TreeSet<Element> sortedLine, String path, int pageNo, int lineNo, 文書属性 文書属性) {
         if (!sortedLine.isEmpty())
             list.add(toString(sortedLine, 文書属性.左余白, 文書属性.行高さ));
-//        if (debugElement != null)
-//            debugElement.element(path, pageNo, lineNo, 文書属性, sortedLine);
+        if (debugElement != null)
+            debugElement.element(path, pageNo, lineNo, 文書属性, sortedLine);
         sortedLine.clear();
     }
 
