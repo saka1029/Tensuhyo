@@ -37,7 +37,7 @@ public class PDFBox {
 
     public final boolean horizontal;
 
-    public float 行併合範囲割合 = 0.29F;
+    public float 行併合範囲割合 = 0.6F;
     public float ルビ割合 = 0.6F;
     public float 行高さ規定値 = 10F;
     public float 行間隔規定値 = 14F;
@@ -175,17 +175,19 @@ public class PDFBox {
 		    ++pageNo;
             List<String> linesString = new ArrayList<>();
             result.add(linesString);
-			float y = Float.MIN_VALUE;
+//			float y = Float.MIN_VALUE;
+			double aveY = 0;
 			TreeSet<Element> sortedLine = new TreeSet<>(行内ソート);
 			int lineNo = 0;
 			for (Entry<Float, List<Element>> line : lines.entrySet()) {
 				List<Element> lineElements = line.getValue();
 				if (lineElements.stream().allMatch(e -> e.fontSize <= 文書属性.ルビ高さ && ルビパターン.matcher(e.text).matches()))
 					continue;
-				if (y != Float.MIN_VALUE && line.getKey() > y + 文書属性.行併合範囲)
+//				if (y != Float.MIN_VALUE && line.getKey() > y + 文書属性.行併合範囲)
+				if (aveY != 0 && line.getKey() > aveY + 文書属性.行併合範囲)
 					addLine(linesString, sortedLine, inPdfPath, pageNo, ++lineNo, 文書属性);
 				sortedLine.addAll(lineElements);
-				y = line.getKey();
+				aveY = sortedLine.stream().mapToDouble(Element::y).average().getAsDouble();
 			}
 			addLine(linesString, sortedLine, inPdfPath, pageNo, ++lineNo, 文書属性);
 		}

@@ -99,7 +99,8 @@ public class TestTensuhyo {
 	}
 	
 	static final Map<String, Set<Integer>> DEBUG_ELEMENTS_MAP = Map.of(
-		"0000196314.pdf", Set.of(10)
+		"0000196314.pdf", Set.of(10),
+		"0000196291.pdf", Set.of(4)
 	);
 
 	static final DebugElement DEBUG_ELEMENTS = (path, p, l, attr, elements) -> {
@@ -132,7 +133,7 @@ public class TestTensuhyo {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testCopyOld() throws IOException {
 		copyOldPdf();
 		copyOldTxt();
