@@ -71,12 +71,17 @@ public class TestTensuhyo {
 			Files.createDirectories(dst);
 			copy(pdfPath(n, "i", param.医科告示PDF), dst);
 			copy(pdfPath(n, "i", param.医科通知PDF), dst);
+			copy(pdfPath(n, "i", param.医科様式PDF), dst);
 			copy(pdfPath(n, "s", param.歯科告示PDF), dst);
 			copy(pdfPath(n, "s", param.歯科通知PDF), dst);
+			copy(pdfPath(n, "s", param.歯科様式PDF), dst);
 			copy(pdfPath(n, "t", param.調剤告示PDF), dst);
 			copy(pdfPath(n, "t", param.調剤通知PDF), dst);
+			copy(pdfPath(n, "t", param.調剤様式PDF), dst);
 			copy(pdfPath(n, "k", param.施設基準告示PDF), dst);
 			copy(pdfPath(n, "k", param.施設基準通知PDF), dst);
+			copy(pdfPath(n, "k", param.施設基準基本様式PDF), dst);
+			copy(pdfPath(n, "k", param.施設基準特掲様式PDF), dst);
 		}
 	}
 
