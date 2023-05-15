@@ -1,13 +1,19 @@
 package saka1029.tensuhyo.pdf;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
+import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.TextPosition;
@@ -50,10 +56,27 @@ public class TestPDFBox {
 		strip(outText.toString(), inPdf.toString());
 	}
 	
-	@Test
-	public void testRead() throws IOException {
+//	@Test
+	public void testテキスト変換() throws IOException {
 		Files.createDirectories(Path.of("test-data"));
 		new PDFBox(false).テキスト変換("test-data/04kokuji.txt", "data/in/04/k/pdf/000907845.pdf");
 		new PDFBox(true).テキスト変換("test-data/04tuti.txt", "data/in/04/k/pdf/000907862.pdf");
+	}
+	
+//	@Test
+	public void testページ分割() throws IOException, COSVisitorException {
+		Files.createDirectories(Path.of("test-data"));
+		String yoshikiList = "test-data/yoshiki-list.txt";
+		try (PrintWriter w = new PrintWriter(yoshikiList, StandardCharsets.UTF_8)) {
+		    w.println("#file data/in/04/i/pdf/000907839.pdf");
+		    w.println("別紙様式1,1,1,1,退院証明書");
+		    w.println("別紙様式2,2,2,4,医療区分・ＡＤＬ区分等に係る評価票");
+		}
+		List<様式> result = PDFBox.ページ分割(yoshikiList, "test-data", "BESI");
+		assertTrue(new File("test-data/BESI1.pdf").exists());
+		assertTrue(new File("test-data/BESI2.pdf").exists());
+		assertEquals(2, result.size());
+		assertEquals(List.of(new 様式("別紙様式1", "1", 1, 1, "退院証明書"),
+		    new 様式("別紙様式2", "2", 2, 4, "医療区分・ＡＤＬ区分等に係る評価票")), result);
 	}
 }

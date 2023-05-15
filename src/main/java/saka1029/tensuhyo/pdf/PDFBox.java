@@ -1,5 +1,6 @@
 package saka1029.tensuhyo.pdf;
 
+import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
@@ -22,8 +24,10 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
+import org.apache.pdfbox.util.Splitter;
 import org.apache.pdfbox.util.TextPosition;
 
 public class PDFBox {
@@ -59,9 +63,9 @@ public class PDFBox {
         }
     }
 
-	public interface DebugElement {
-		void element(String path, int pageNo, int lineNo, 文書属性 attr, TreeSet<Element> elements);
-	}
+    public interface DebugElement {
+        void element(String path, int pageNo, int lineNo, 文書属性 attr, TreeSet<Element> elements);
+    }
 
     static final Comparator<Element> 行内ソート = Comparator.comparing(Element::x)
         .thenComparing(Comparator.comparing(Element::y).reversed());
@@ -138,7 +142,7 @@ public class PDFBox {
             }
         };
     }
-    
+
     String toString(TreeSet<Element> line, float leftMargin, float charWidth) {
         StringBuilder sb = new StringBuilder();
         float halfWidth = charWidth / 2;
@@ -173,54 +177,54 @@ public class PDFBox {
         List<TreeMap<Float, List<Element>>> fileLines = 行分割(fileElements);
         文書属性 文書属性 = 文書属性(fileLines);
         OUT.printf("%s:%s:%n", inPdfPath, 文書属性);
-		int pageNo = 0;
-		for (TreeMap<Float, List<Element>> lines : fileLines) {
-		    ++pageNo;
+        int pageNo = 0;
+        for (TreeMap<Float, List<Element>> lines : fileLines) {
+            ++pageNo;
             List<String> linesString = new ArrayList<>();
             result.add(linesString);
 //			float y = Float.MIN_VALUE;
-			TreeSet<Element> sortedLine = new TreeSet<>(行内ソート);
-			int lineNo = 0;
-			for (Entry<Float, List<Element>> line : lines.entrySet()) {
-				List<Element> lineElements = line.getValue();
-				if (lineElements.stream().allMatch(e -> e.fontSize <= 文書属性.ルビ高さ && ルビパターン.matcher(e.text).matches()))
-					continue;
+            TreeSet<Element> sortedLine = new TreeSet<>(行内ソート);
+            int lineNo = 0;
+            for (Entry<Float, List<Element>> line : lines.entrySet()) {
+                List<Element> lineElements = line.getValue();
+                if (lineElements.stream().allMatch(e -> e.fontSize <= 文書属性.ルビ高さ && ルビパターン.matcher(e.text).matches()))
+                    continue;
 //				if (y != Float.MIN_VALUE && line.getKey() > y + 文書属性.行併合範囲)
-				if (!sortedLine.isEmpty()
-						&& line.getKey() > sortedLine.stream().mapToDouble(Element::y).average().getAsDouble() + 文書属性.行併合範囲)
-					addLine(linesString, sortedLine, inPdfPath, pageNo, ++lineNo, 文書属性);
-				sortedLine.addAll(lineElements);
-			}
-			addLine(linesString, sortedLine, inPdfPath, pageNo, ++lineNo, 文書属性);
-		}
+                if (!sortedLine.isEmpty()
+                    && line.getKey() > sortedLine.stream().mapToDouble(Element::y).average().getAsDouble() + 文書属性.行併合範囲)
+                    addLine(linesString, sortedLine, inPdfPath, pageNo, ++lineNo, 文書属性);
+                sortedLine.addAll(lineElements);
+            }
+            addLine(linesString, sortedLine, inPdfPath, pageNo, ++lineNo, 文書属性);
+        }
         return result;
     }
 
-	public void テキスト変換(String outTextFile, String... inPdfFiles) throws IOException {
-		try (PrintWriter writer = new PrintWriter(new FileWriter(outTextFile, 出力文字セット))) {
-			for (String path : inPdfFiles) {
-				List<List<String>> pages = read(path);
-				for (int i = 0, pageSize = pages.size(); i < pageSize; ++i) {
-					writer.printf("# file: %s page: %d%s", Path.of(path).getFileName(), i + 1, 改行文字);
-					for (String line : pages.get(i))
-						writer.printf("%s%s", ページ番号パターン.matcher(line).replaceFirst("#$0"), 改行文字);
-				}
-			}
-		}
-	}
+    public void テキスト変換(String outTextFile, String... inPdfFiles) throws IOException {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(outTextFile, 出力文字セット))) {
+            for (String path : inPdfFiles) {
+                List<List<String>> pages = read(path);
+                for (int i = 0, pageSize = pages.size(); i < pageSize; ++i) {
+                    writer.printf("# file: %s page: %d%s", Path.of(path).getFileName(), i + 1, 改行文字);
+                    for (String line : pages.get(i))
+                        writer.printf("%s%s", ページ番号パターン.matcher(line).replaceFirst("#$0"), 改行文字);
+                }
+            }
+        }
+    }
 
-	public int 様式名出現最大行 = 3;
-	public Pattern 様式IDパターン = Pattern.compile(
-	    "\\s*[（(]?("                         // group1:別紙様式3の4の5
-	    + "\\s*(?:(?:別\\s*紙)?\\s*様\\s*式|別\\s*添|別\\s*紙)"
-	    + "((?:\\s*\\d)+)"                          // group2:3
-	    + "(?:\\s*の((?:\\s*\\d)+))?"           // group3:4
-	    + "(?:\\s*の((?:\\s*\\d)+))?"           // group4:5
-	    + ")\\s*[）)]?"
-	    + "(?:\\s+(.*))?");                 // group5:様式名
+    public int 様式名出現最大行 = 3;
+    public Pattern 様式IDパターン = Pattern.compile(
+        "\\s*[（(]?(" // group1:別紙様式3の4の5
+            + "\\s*(?:(?:別\\s*紙)?\\s*様\\s*式|別\\s*添|別\\s*紙)"
+            + "((?:\\s*\\d)+)" // group2:3
+            + "(?:\\s*の((?:\\s*\\d)+))?" // group3:4
+            + "(?:\\s*の((?:\\s*\\d)+))?" // group4:5
+            + ")\\s*[）)]?"
+            + "(?:\\s+(.*))?"); // group5:様式名
 
-	public void 様式一覧変換(String outFile, String... inFiles) throws IOException {
-	    try (PrintWriter writer = new PrintWriter(outFile, 出力文字セット)) {
+    public void 様式一覧変換(String outFile, String... inFiles) throws IOException {
+        try (PrintWriter writer = new PrintWriter(outFile, 出力文字セット)) {
             for (String inFile : inFiles) {
                 List<List<String>> pages = read(inFile);
                 writer.printf("#file %s%s", inFile, 改行文字);
@@ -235,8 +239,8 @@ public class PDFBox {
                         String normalLine = Normalizer.normalize(line, Form.NFKD);
                         Matcher m = 様式IDパターン.matcher(normalLine);
                         if (m.matches()) {
-                        	if (name != null)
-								writer.printf("%s,%s,%d,%d,%s%s", name, id, startPage, i, title, 改行文字);
+                            if (name != null)
+                                writer.printf("%s,%s,%d,%d,%s%s", name, id, startPage, i, title, 改行文字);
                             name = m.group(1).replaceAll("\\s+", "");
                             id = m.group(2);
                             startPage = i + 1;
@@ -250,9 +254,46 @@ public class PDFBox {
                         }
                     }
                 }
-				if (name != null)
-					writer.printf("%s,%s,%d,%d,%s%s", name, id, startPage, i, title, 改行文字);
+                if (name != null)
+                    writer.printf("%s,%s,%d,%d,%s%s", name, id, startPage, i, title, 改行文字);
             }
-	    }
-	}
+        }
+    }
+    
+    public static List<様式> ページ分割(String inTextFile, String outDir, String outPdfPrefix) throws IOException, COSVisitorException {
+        List<様式> result = new ArrayList<>();
+        try (BufferedReader reader = Files.newBufferedReader(Path.of(inTextFile), 出力文字セット)) {
+            PDDocument doc = null;
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("#file")) {
+                    if (doc != null)
+                        doc.close();
+                    doc = PDDocument.load(line.replaceFirst("#file\\s*", ""));
+                } else if (line.isBlank() || line.startsWith("#"))
+                    continue;
+                else {
+                    String[] fields = line.split(",", 5);
+                    String name = fields[0];
+                    String id = fields[1];
+                    String outFile = outPdfPrefix + id + ".pdf";
+                    String title = fields[4];
+                    int startPage = Integer.parseInt(fields[2]);
+                    int endPage = Integer.parseInt(fields[3]);
+                    result.add(new 様式(name, id, startPage, endPage, title));
+                    Splitter splitter = new Splitter();
+                    splitter.setStartPage(startPage);
+                    splitter.setEndPage(endPage);
+                    splitter.setSplitAtPage(doc.getNumberOfPages());
+                    List<PDDocument> splitted = splitter.split(doc);
+                    try (Closeable c = () -> splitted.stream().close()) {
+                        splitted.get(0).save(outDir + "/" + outFile);
+                    }
+                }
+            }
+            if (doc != null)
+                doc.close();
+        }
+        return result;
+    }
 }
