@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -204,5 +207,50 @@ public class PDFBox {
 				}
 			}
 		}
+	}
+
+	public int 様式名出現最大行 = 3;
+	public Pattern 様式IDパターン = Pattern.compile(
+	    "\\s*\\(?("                         // group1:別紙様式3の4の5
+	    + "(?:(?:別紙)?様式|別添|別紙)\\s*"
+	    + "(\\d+)"                          // group2:3
+	    + "(?:\\s*の\\s*(\\d+))?"           // group3:4
+	    + "(?:\\s*の\\s*(\\d+))?"           // group4:5
+	    + ")\\)?"
+	    + "(?:\\s+(.*))?");                 // group5:様式名
+
+	public void 様式一覧変換(String outFile, String... inFiles) throws IOException {
+	    try (PrintWriter writer = new PrintWriter(outFile, 出力文字セット)) {
+            for (String inFile : inFiles) {
+                List<List<String>> pages = read(inFile);
+                writer.printf("#file %s%s", inFile, 改行文字);
+                String name = null, id = null, title = null;
+                int startPage = -1;
+                int i = 0;
+                for (int pageSize = pages.size(); i < pageSize; ++i) {
+                    List<String> page = pages.get(i);
+                    for (int j = 0, maxLine = Math.min(様式名出現最大行, page.size()); j < maxLine; ++j) {
+                        String line = page.get(j);
+                        String normalLine = Normalizer.normalize(line, Form.NFKD);
+                        Matcher m = 様式IDパターン.matcher(normalLine);
+                        if (m.matches()) {
+                        	if (name != null)
+								writer.printf("%s,%s,%d,%d,%s%s", name, id, startPage, i, title, 改行文字);
+                            name = m.group(1);
+                            id = m.group(2);
+                            startPage = i + 1;
+                            for (int k = 3; k <= 5 && m.group(k) != null; ++k)
+                                id += "_" + m.group(k);
+                            title = m.group(5);
+                            if (title == null && j + 1 < page.size())
+                                title = page.get(j + 1);
+                            title = title.replaceAll("\\s+", "");
+                        }
+                    }
+                }
+				if (name != null)
+					writer.printf("%s,%s,%d,%d,%s%s", name, id, startPage, i, title, 改行文字);
+            }
+	    }
 	}
 }

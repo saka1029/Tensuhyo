@@ -34,10 +34,10 @@ public class TestTensuhyo {
 
 	static class Param {
 		String 元号, 年度;
-		String[] 医科告示PDF, 医科通知PDF;
-		String[] 歯科告示PDF, 歯科通知PDF;
-		String[] 調剤告示PDF, 調剤通知PDF;
-		String[] 施設基準告示PDF, 施設基準通知PDF;
+		String[] 医科告示PDF, 医科通知PDF, 医科様式PDF;
+		String[] 歯科告示PDF, 歯科通知PDF, 歯科様式PDF;
+		String[] 調剤告示PDF, 調剤通知PDF, 調剤様式PDF;
+		String[] 施設基準告示PDF, 施設基準通知PDF, 施設基準基本様式PDF, 施設基準特掲様式PDF;
 	}
 
 	static final CopyOption OW = StandardCopyOption.REPLACE_EXISTING;
@@ -133,7 +133,21 @@ public class TestTensuhyo {
 		}
 	}
 	
-//	@Test
+	static void copyYoshikiIchiran() throws IOException {
+		for (String paramFile : PARAMS) {
+			Param param = param(paramFile);
+			String n = param.年度;
+			Path dst = Path.of(OUT_DIR, "yoshiki");
+			Files.createDirectories(dst);
+			new PDFBox(true).様式一覧変換(dst.resolve(n + "-i.txt").toString(), pdfPath(n, "i", param.医科様式PDF));
+			new PDFBox(true).様式一覧変換(dst.resolve(n + "-s.txt").toString(), pdfPath(n, "s", param.歯科様式PDF));
+			new PDFBox(true).様式一覧変換(dst.resolve(n + "-t.txt").toString(), pdfPath(n, "t", param.調剤様式PDF));
+			new PDFBox(true).様式一覧変換(dst.resolve(n + "-k-kihon.txt").toString(), pdfPath(n, "k", param.施設基準基本様式PDF));
+			new PDFBox(true).様式一覧変換(dst.resolve(n + "-k-tokkei.txt").toString(), pdfPath(n, "k", param.施設基準特掲様式PDF));
+		}
+	}
+	
+	@Test
 	public void testCopyOld() throws IOException {
 		copyOldPdf();
 		copyOldTxt();
@@ -142,5 +156,10 @@ public class TestTensuhyo {
 	@Test
 	public void testCopyNew() throws IOException {
 		copyNewTxt();
+	}
+	
+	@Test
+	public void testCopyYoshikiIchiran() throws IOException {
+	    copyYoshikiIchiran();
 	}
 }
