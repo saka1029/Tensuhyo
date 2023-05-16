@@ -17,7 +17,7 @@ import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.TextPosition;
-import org.junit.Test;
+//import org.junit.Test;
 
 public class TestPDFBox {
 

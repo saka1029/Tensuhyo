@@ -138,7 +138,7 @@ public class TestTensuhyo {
 		}
 	}
 	
-	static void copyYoshikiIchiran() throws IOException {
+	static void copy様式一覧() throws IOException {
 		for (String paramFile : PARAMS) {
 			Param param = param(paramFile);
 			String n = param.年度;
@@ -164,7 +164,7 @@ public class TestTensuhyo {
 	}
 	
 	@Test
-	public void testCopyYoshikiIchiran() throws IOException {
-	    copyYoshikiIchiran();
+	public void test様式一覧() throws IOException {
+	    copy様式一覧();
 	}
 }
