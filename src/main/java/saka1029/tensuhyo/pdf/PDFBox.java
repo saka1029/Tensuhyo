@@ -257,7 +257,7 @@ public class PDFBox {
 //        }
 //    }
     
-    public static List<様式> ページ分割(String inTextFile, String outDir, String outPdfPrefix) throws IOException, COSVisitorException {
+    public static List<様式> ページ分割(String inTextFile, String outDir/*, String outPdfPrefix*/) throws IOException, COSVisitorException {
         List<様式> result = new ArrayList<>();
         try (BufferedReader reader = Files.newBufferedReader(Path.of(inTextFile), 出力文字セット)) {
             PDDocument doc = null;
@@ -273,7 +273,7 @@ public class PDFBox {
                     String[] fields = line.split(",", 5);
                     String name = fields[0];
                     String id = fields[1];
-                    String outFile = outPdfPrefix + id + ".pdf";
+                    String outFile = /* outPdfPrefix + */ id + ".pdf";
                     String title = fields[4];
                     int startPage = Integer.parseInt(fields[2]);
                     int endPage = Integer.parseInt(fields[3]);
