@@ -20,4 +20,13 @@ public class Test様式 {
         様式.施設基準様式一覧変換(outTxtFile, inPdfFiles);
     }
 
+    @Test
+    public void test医科様式一覧変換() throws IOException {
+        String[] inPdfFiles = {
+            "data/in/04/i/pdf/000907839.pdf"
+        };
+        String outTxtFile = "test-data/04-i-yosiki-list.txt";
+        様式.様式一覧変換(outTxtFile, inPdfFiles);
+    }
+
 }

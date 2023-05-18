@@ -144,11 +144,11 @@ public class TestTensuhyo {
 			String n = param.年度;
 			Path dst = Path.of(OUT_DIR, "yoshiki");
 			Files.createDirectories(dst);
-			new PDFBox(true).様式一覧変換(dst.resolve(n + "-i.txt").toString(), pdfPath(n, "i", param.医科様式PDF));
-			new PDFBox(true).様式一覧変換(dst.resolve(n + "-s.txt").toString(), pdfPath(n, "s", param.歯科様式PDF));
-			new PDFBox(true).様式一覧変換(dst.resolve(n + "-t.txt").toString(), pdfPath(n, "t", param.調剤様式PDF));
-			new PDFBox(true).様式一覧変換(dst.resolve(n + "-k-kihon.txt").toString(), pdfPath(n, "k", param.施設基準基本様式PDF));
-			new PDFBox(true).様式一覧変換(dst.resolve(n + "-k-tokkei.txt").toString(), pdfPath(n, "k", param.施設基準特掲様式PDF));
+			様式.様式一覧変換(dst.resolve(n + "-i.txt").toString(), pdfPath(n, "i", param.医科様式PDF));
+			様式.様式一覧変換(dst.resolve(n + "-s.txt").toString(), pdfPath(n, "s", param.歯科様式PDF));
+			様式.様式一覧変換(dst.resolve(n + "-t.txt").toString(), pdfPath(n, "t", param.調剤様式PDF));
+			様式.施設基準様式一覧変換(dst.resolve(n + "-k-kihon.txt").toString(), pdfPath(n, "k", param.施設基準基本様式PDF));
+			様式.施設基準様式一覧変換(dst.resolve(n + "-k-tokkei.txt").toString(), pdfPath(n, "k", param.施設基準特掲様式PDF));
 		}
 	}
 	
