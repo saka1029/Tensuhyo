@@ -31,7 +31,11 @@ public record 様式(String name, String id, int startPage, int endPage, String 
 
     static final int 様式名出現最大行 = 3;
 
-    static String id(String name) {
+    /**
+     * 様式名を様式IDに変換します。
+     */
+    public static String id(String name) {
+        Normalizer.normalize(name.replaceAll("\\s+", ""), Form.NFKD);
         return name.replaceAll("\\s+", "").replaceAll("別添", "T").replaceAll("別紙", "S").replaceAll("様式", "Y")
             .replaceAll("の", "_");
     }
