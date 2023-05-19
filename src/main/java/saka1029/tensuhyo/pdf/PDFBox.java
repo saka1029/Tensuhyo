@@ -283,9 +283,9 @@ public class PDFBox {
                     splitter.setEndPage(endPage);
                     splitter.setSplitAtPage(doc.getNumberOfPages());
                     List<PDDocument> splitted = splitter.split(doc);
-                    try (Closeable c = () -> splitted.stream().close()) {
-                        splitted.get(0).save(outDir + "/" + outFile);
-                    }
+                    splitted.get(0).save(outDir + "/" + outFile);
+                    for (PDDocument d : splitted)
+                        d.close();
                 }
             }
             if (doc != null)
