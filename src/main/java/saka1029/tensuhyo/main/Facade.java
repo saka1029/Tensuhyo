@@ -627,6 +627,6 @@ public class Facade {
 	
 	public void 調剤様式一覧生成() throws IOException, COSVisitorException {
 	    List<様式> list = PDFBox.ページ分割(テキストパス("t", "様式"), HTMLパス("t") + "/image");
-        new 様式一覧Renderer().HTML出力(list, HTMLパス("t") + "/yoshiki.html", 元号 + 年度 + "年 歯科様式一覧");
+        new 様式一覧Renderer().HTML出力(list, HTMLパス("t") + "/yoshiki.html", 元号 + 年度 + "年 調剤様式一覧");
 	}
 }
