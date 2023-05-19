@@ -197,8 +197,9 @@ public class PDFBox {
         return result;
     }
 
-    public void テキスト変換(String outTextFile, String... inPdfFiles) throws IOException {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(outTextFile, 出力文字セット))) {
+    public void テキスト変換(String outTxtFile, String... inPdfFiles) throws IOException {
+        Files.createDirectories(Path.of(outTxtFile).getParent());
+        try (PrintWriter writer = new PrintWriter(new FileWriter(outTxtFile, 出力文字セット))) {
             for (String path : inPdfFiles) {
                 List<List<String>> pages = read(path);
                 for (int i = 0, pageSize = pages.size(); i < pageSize; ++i) {
@@ -257,7 +258,8 @@ public class PDFBox {
 //        }
 //    }
     
-    public static List<様式> ページ分割(String inTextFile, String outDir/*, String outPdfPrefix*/) throws IOException, COSVisitorException {
+    public static List<様式> ページ分割(String inTextFile, String outDir) throws IOException, COSVisitorException {
+        Files.createDirectories(Path.of(outDir));
         List<様式> result = new ArrayList<>();
         try (BufferedReader reader = Files.newBufferedReader(Path.of(inTextFile), 出力文字セット)) {
             PDDocument doc = null;

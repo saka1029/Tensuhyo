@@ -3,6 +3,8 @@ package saka1029.tensuhyo.pdf;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.List;
@@ -81,6 +83,7 @@ public record 様式(String name, String id, int startPage, int endPage, String 
      * 
      */
     public static void 施設基準様式一覧変換(String outTxtFile, String... inPdfFiles) throws IOException {
+        Files.createDirectories(Path.of(outTxtFile).getParent());
         try (PrintWriter out = new PrintWriter(outTxtFile, StandardCharsets.UTF_8)) {
             for (String inPdfFile : inPdfFiles) {
                 out.printf("#file %s\n", inPdfFile);
@@ -126,6 +129,7 @@ public record 様式(String name, String id, int startPage, int endPage, String 
         + ")\\s*[)）]?(?:\\s+(.+))?"); // 様式タイトル (group2)
 
     public static void 様式一覧変換(String outTxtFile, String... inPdfFiles) throws IOException {
+        Files.createDirectories(Path.of(outTxtFile).getParent());
         try (PrintWriter out = new PrintWriter(outTxtFile, StandardCharsets.UTF_8)) {
             for (String inPdfFile : inPdfFiles) {
                 out.printf("#file %s\n", inPdfFile);

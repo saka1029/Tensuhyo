@@ -22,7 +22,6 @@ public class Test様式 {
             "data/in/04/k/pdf/000907989.pdf",
             "data/in/04/k/pdf/000907862.pdf"
         };
-        Files.createDirectories(Path.of("test-data/04/k"));
         String outTxtFile = "test-data/04/k/yosiki.txt";
         様式.施設基準様式一覧変換(outTxtFile, inPdfFiles);
     }
@@ -31,7 +30,6 @@ public class Test様式 {
     public void test施設基準様式一覧出力() throws IOException, COSVisitorException {
         String base = "test-data/04/k/";
         String inTxtFile = base + "様式.txt";
-        Files.createDirectories(Path.of(base, "image"));
         List<様式> list = PDFBox.ページ分割(inTxtFile, base + "image");
         new 様式一覧Renderer().HTML出力(list, base + "yoshiki.html", "令和04年度 施設基準様式一覧");
     }
@@ -41,8 +39,17 @@ public class Test様式 {
         String[] inPdfFiles = {
             "data/in/04/i/pdf/000907839.pdf"
         };
-        String outTxtFile = "test-data/04-i-yosiki-list.txt";
+        String outTxtFile = "test-data/04/i/yosiki.txt";
         様式.様式一覧変換(outTxtFile, inPdfFiles);
+    }
+    
+    @Test
+    public void test医科様式一覧出力() throws IOException, COSVisitorException {
+        String base = "test-data/04/i/";
+        String inTxtFile = base + "様式.txt";
+        Files.createDirectories(Path.of(base, "image"));
+        List<様式> list = PDFBox.ページ分割(inTxtFile, base + "image");
+        new 様式一覧Renderer().HTML出力(list, base + "yoshiki.html", "令和04年度 医科様式一覧");
     }
 
 }
