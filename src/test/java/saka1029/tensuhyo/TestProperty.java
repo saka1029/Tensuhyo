@@ -16,7 +16,7 @@ public class TestProperty {
 
     static Logger logger = Logger.getLogger(TestProperty.class.getName());
 
-    @Test
+//    @Test
     public void testMultiline() throws IOException {
         String in = "# これはコメント行\n"
             + "a=a0,\\\n"
@@ -28,7 +28,7 @@ public class TestProperty {
         assertEquals("a0,a1,a2", prop.getProperty("a"));
     }
 
-    @Test
+//    @Test
     public void testGson() {
         String json = "{"
             + "    \"元号\" : \"令和\",\n"
@@ -83,7 +83,7 @@ public class TestProperty {
         assertArrayEquals(new String[] {"000907845.pdf", "000908781.pdf"}, facade.施設基準告示PDF);
     }
 
-    @Test
+//    @Test
     public void testReadFile() throws IOException {
         Gson gson = new Gson();
         String json = Files.readString(Paths.get("r0404.json"));

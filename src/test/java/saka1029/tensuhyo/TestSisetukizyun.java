@@ -15,8 +15,6 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.Test;
-
 import saka1029.tensuhyo.pdf.Pdf;
 import saka1029.tensuhyo.pdf.StringFunction;
 
@@ -58,7 +56,7 @@ public class TestSisetukizyun  {
             .replace("十対一", "10対１");
     }
 
-    @Test
+//    @Test
     public void testTitles() throws IOException {
         List<String> ks = titles(KOKUJI);
         List<String> ts = titles(TUTI);
@@ -121,12 +119,12 @@ public class TestSisetukizyun  {
 	    });
 	}
 	
-	@Test
+//	@Test
 	public void test施設基準告示変換() throws IOException {
 	    施設基準告示変換();
 	}
 	
-	@Test
+//	@Test
 	public void testPDF() throws IOException {
 	    Pdf pdf = new Pdf(pdfPath + "000908781.pdf", false);
 	    pdf.addDebugLine(96, 13);

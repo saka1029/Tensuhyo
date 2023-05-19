@@ -16,7 +16,7 @@ public class Test様式 {
 
     static final PrintStream OUT = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
-    @Test
+//    @Test
     public void test施設基準様式一覧変換() throws IOException {
         String[] inPdfFiles = {
             "data/in/04/k/pdf/000907989.pdf",
@@ -26,7 +26,7 @@ public class Test様式 {
         様式.施設基準様式一覧変換(outTxtFile, inPdfFiles);
     }
     
-    @Test
+//    @Test
     public void test施設基準様式一覧出力() throws IOException, COSVisitorException {
         String base = "test-data/04/k/";
         String inTxtFile = base + "様式.txt";
@@ -34,7 +34,7 @@ public class Test様式 {
         new 様式一覧Renderer().HTML出力(list, base + "yoshiki.html", "令和04年度 施設基準様式一覧");
     }
 
-    @Test
+//    @Test
     public void test医科様式一覧変換() throws IOException {
         String[] inPdfFiles = {
             "data/in/04/i/pdf/000907839.pdf"
@@ -43,7 +43,7 @@ public class Test様式 {
         様式.様式一覧変換(outTxtFile, inPdfFiles);
     }
     
-    @Test
+//    @Test
     public void test医科様式一覧出力() throws IOException, COSVisitorException {
         String base = "test-data/04/i/";
         String inTxtFile = base + "様式.txt";

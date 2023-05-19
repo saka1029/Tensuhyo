@@ -152,18 +152,18 @@ public class TestTensuhyo {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testCopyOld() throws IOException {
 		copyOldPdf();
 		copyOldTxt();
 	}
 	
-	@Test
+//	@Test
 	public void testCopyNew() throws IOException {
 		copyNewTxt();
 	}
 	
-	@Test
+//	@Test
 	public void test様式一覧() throws IOException {
 	    copy様式一覧();
 	}

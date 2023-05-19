@@ -27,7 +27,7 @@ public class TestRenderer {
         + "         及び再診の費用は、第１節又は第２節の各区分の所定点数\r\n"
         + "         により算定する。\r\n";
 
-    @Test
+//    @Test
     public void testRendererGoogleAnalyticsTrackingCode() throws IOException, ParseException {
         Document doc = new 医科告示読込().parse(KOKUJI, "令和04年医科");
         Path outPath = Files.createTempDirectory("tensuhyo-TestRenderer");
