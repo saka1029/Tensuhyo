@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 import saka1029.tensuhyo.parser.Document;
 import saka1029.tensuhyo.parser.Node;
-import saka1029.tensuhyo.util.StringConverter;
+import saka1029.tensuhyo.pdf.様式;
 import saka1029.tensuhyo.util.StringEditor;
 import saka1029.tensuhyo.util.TextWriter;
 
@@ -110,43 +110,59 @@ public class 施設基準Renderer {
     }
 
     private static String NUM = "[0-9０-９]+";
-    private static Pattern YOSHIKI_PAT = Pattern.compile("別添(?<B>" + NUM + ")(の様式(?<M>" + NUM + ")"
-        + "(の(?<N>" + NUM + ")(の(?<E>" + NUM + "))?)?"
+    private static Pattern YOSHIKI_PAT = Pattern.compile("別添(" + NUM + ")(の(別紙|様式)(" + NUM + ")"
+        + "(の(" + NUM + ")(の(" + NUM + "))?)?"
         + ")?");
-    private static String num(String s) {
-        if (s == null) return "";
-        return StringConverter.toNormalWidthANS(s);
-    }
+//    private static String num(String s) {
+//        if (s == null) return "";
+//        return StringConverter.toNormalWidthANS(s);
+//    }
 
     private String imageLink(String s, Node node) {
         String repl = StringEditor.replace(s, YOSHIKI_PAT,
             m -> {
-                String betten = num(m.group("B"));
-                String yoshiki = num(m.group("M"));
-                String eda = num(m.group("N"));
-                String oi = num(m.group("E"));
-                String f = "KIHON-BETTEN" + betten;
-//                if (betten.equals("2") && yoshiki.equals("12"))
-//                    System.out.println(node);
-                if (!yoshiki.equals("")) f += "-BESI" + yoshiki;
-                if (!eda.equals("")) f += "_" + eda;
-                if (!oi.equals("")) f += "_" + oi;
-                f += ".pdf";
+            	String f = 様式.id(m.group(0)) + ".pdf";
                 boolean exists = new File(callback.imageDir(), f).exists();
-                if (!exists) {
-                    f = f.replaceFirst("^KIHON-", "TOKKEI_");
-                    exists = new File(callback.imageDir(), f).exists();
-                }
                 if (exists)
                     return String.format("<a href='image/%s'>%s</a>",
                         f, m.group(0));
                 else {
-                    logger.severe("imageLink : " + f + " " + node.fileName());
+                    logger.severe("imageLink:様式がありません: " + f + " " + node.fileName());
                     return null;
                 }
             });
         return repl;
     }
+
+//    private String imageLink(String s, Node node) {
+//        String repl = StringEditor.replace(s, YOSHIKI_PAT,
+//            m -> {
+//                String betten = num(m.group("B"));
+//                String yoshiki = num(m.group("M"));
+//                String eda = num(m.group("N"));
+//                String oi = num(m.group("E"));
+//                String f = "KIHON-BETTEN" + betten;
+////                if (betten.equals("2") && yoshiki.equals("12"))
+////                    System.out.println(node);
+//                if (!yoshiki.equals("")) f += "-BESI" + yoshiki;
+//                if (!eda.equals("")) f += "_" + eda;
+//                if (!oi.equals("")) f += "_" + oi;
+//                f += ".pdf";
+//                boolean exists = new File(callback.imageDir(), f).exists();
+//                if (!exists) {
+//                    f = f.replaceFirst("^KIHON-", "TOKKEI_");
+//                    exists = new File(callback.imageDir(), f).exists();
+//                }
+//                if (exists)
+//                    return String.format("<a href='image/%s'>%s</a>",
+//                        f, m.group(0));
+//                else {
+//                    logger.severe("imageLink : " + f + " " + node.fileName());
+//                    return null;
+//                }
+//            });
+//        return repl;
+//    }
 
     private void detailTuti(Node node, TextWriter w, int level, boolean top) throws IOException {
         if (top) w.printf("<p>[通知]</p>");

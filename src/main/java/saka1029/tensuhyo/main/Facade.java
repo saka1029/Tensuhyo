@@ -28,7 +28,6 @@ import saka1029.tensuhyo.parser.調剤告示読込;
 import saka1029.tensuhyo.parser.調剤通知読込;
 import saka1029.tensuhyo.pdf.PDFBox;
 import saka1029.tensuhyo.pdf.様式;
-import saka1029.tensuhyo.util.StringConverter;
 import saka1029.tensuhyo.util.TextIO;
 import saka1029.tensuhyo.util.TextWriter;
 
@@ -254,7 +253,7 @@ public class Facade {
 		Document doc = parser.parse(inText, 元号 + 年度 + "年医科");
 		// TextIO.WriteTo(doc.toLongString(), テキストパス("i", "告示debug"), ENCODING);
 		Converter.事項追加(doc);
-		Converter.目次チェック(doc);
+//		Converter.目次チェック(doc);
 		索引 dict =  new 索引();
 		dict.区分番号辞書作成(doc, new 索引Option() {
 			@Override public String 区分番号表示(String fileName) { return fileName; }
@@ -264,7 +263,7 @@ public class Facade {
 		Parser tutiParser = new 医科通知読込();
 		Document tutiDoc = tutiParser.parse(tutiText, 元号 + 年度 + "年医科通知");
 		Converter.事項追加(tutiDoc);
-		Converter.目次チェック(tutiDoc);
+//		Converter.目次チェック(tutiDoc);
 		Converter.通知マージ(doc, tutiDoc);
 		Renderer renderer = new Renderer();
 		// 施設基準辞書追加
@@ -386,7 +385,7 @@ public class Facade {
 		Document doc = parser.parse(inText, 元号 + 年度 + "歯科");
 		// TextIO.WriteTo(doc.toLongString(), テキストパス("s", "告示debug"), ENCODING);
 		Converter.事項追加(doc);
-		Converter.目次チェック(doc);
+//		Converter.目次チェック(doc);
 		索引 dict =  new 索引();
 		dict.区分番号辞書作成(doc, new 索引Option() {
 			@Override public String 区分番号表示(String fileName) { return fileName; }
@@ -395,7 +394,7 @@ public class Facade {
 		Parser tutiParser = new 医科通知読込();
 		Document tutiDoc = tutiParser.parse(tutiText, 元号 + 年度 + "歯科通知");
 		Converter.事項追加(tutiDoc);
-		Converter.目次チェック(tutiDoc);
+//		Converter.目次チェック(tutiDoc);
 		Converter.通知マージ(doc, tutiDoc);
 		Renderer renderer = new Renderer();
 	    // 施設基準辞書追加
@@ -522,7 +521,7 @@ public class Facade {
 		Parser parser = new 調剤告示読込();
 		Document doc = parser.parse(inText, 元号 + 年度 + "年調剤");
 		Converter.事項追加(doc);
-		Converter.目次チェック(doc);
+//		Converter.目次チェック(doc);
 		索引 dict =  new 索引();
 		dict.区分番号辞書作成(doc, new 索引Option() {
 			@Override public String 区分番号表示(String fileName) { return fileName.replaceAll("-", "の"); }
@@ -532,7 +531,7 @@ public class Facade {
 		Parser tutiParser = new 調剤通知読込();
 		Document tutiDoc = tutiParser.parse(tutiText, 元号 + 年度 + "年調剤通知");
 		Converter.事項追加(tutiDoc);
-		Converter.目次チェック(tutiDoc);
+//		Converter.目次チェック(tutiDoc);
 		Converter.通知マージ(doc, tutiDoc);
 		Renderer renderer = new Renderer();
 		// 施設基準辞書追加

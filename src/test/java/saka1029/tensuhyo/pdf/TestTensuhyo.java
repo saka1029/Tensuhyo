@@ -12,8 +12,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Test;
-
 import com.google.gson.Gson;
 
 import saka1029.tensuhyo.pdf.PDFBox.DebugElement;

@@ -118,8 +118,8 @@ public class Converter {
 			if (i > 0) ok = false;
 			while (i < size && isText(node.children(i)))
 				++i;
-			if (i < size)
-				logger.log(Level.SEVERE, "目次ノードの下にテキストの混在あり" + node.toLongString());
+//			if (i < size)
+//				logger.log(Level.SEVERE, "目次ノードの下にテキストの混在あり" + node.toLongString());
 			if (!ok) {
 				Node child = 事項.value.match("", node.lineNo());
 				insertChild(node, child);
@@ -177,8 +177,8 @@ public class Converter {
 				logger.log(Level.SEVERE, String.format(
 					"参照されない通知%s", e.getValue().toLongString()));
 			else {
-				logger.warning(String.format(
-					"参照された通知%s 告示=%s", e.getValue().toLongString(), parent));
+//				logger.warning(String.format(
+//					"参照された通知%s 告示=%s", e.getValue().toLongString(), parent));
 				// 既に通則が先頭にあれば追加しない。
 				if (parent.childrenSize() <= 0 || !parent.children(0).name().equals("通則")) {
                     Node child = 通則_告示.value.match("通則", parent.lineNo());

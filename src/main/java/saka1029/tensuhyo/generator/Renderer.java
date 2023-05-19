@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import saka1029.tensuhyo.dictionary.WordFound;
 import saka1029.tensuhyo.parser.Document;
 import saka1029.tensuhyo.parser.Node;
-import saka1029.tensuhyo.util.StringConverter;
+import saka1029.tensuhyo.pdf.様式;
 import saka1029.tensuhyo.util.StringEditor;
 import saka1029.tensuhyo.util.TextWriter;
 
@@ -154,7 +154,40 @@ public class Renderer {
 
 	private static final Pattern タグ編集正規表現 = Pattern.compile(
 		"(?<TENSU>[0-9,.０-９，．]+点)|" +
-		"(?<BESI>別(紙|添)様式[0-9０-９]+(?:の[0-9０-９]+)?)");
+		"(?<BESI>別(紙|添)様式[0-9０-９]+(の[0-9０-９]+)?(の[0-9０-９]+)?)");
+
+//	private static String タグ編集(final Node node, String s, final File dir) {
+//		final File images = new File(dir, "image");
+//		return StringEditor.replace(s, タグ編集正規表現, new StringEditor() {
+//			@Override
+//			public String replace(Matcher m) {
+//				if (m.group("TENSU") != null)
+//					return String.format("<span class='tensu'>%s</span>", m.group("TENSU"));
+//				else if (m.group("BESI") != null) {
+//					logger.info(String.format("イメージリンク %s %s", m.group("BESI"), node.path() ));
+//					String name = m.group("BESI").replaceFirst("別(紙|添)様式", "BESI").replaceFirst("の", "_");
+//					name = StringConverter.toNormalWidthANS(name);
+////					StringBuilder hash = new StringBuilder();
+//					String first = name + ".pdf";
+//					if (new File(images, first).exists()) {
+//						return String.format("<a href='image/%s'>%s</a>", first, m.group("BESI"));
+////						hash.append("../image/").append(first);
+////						for (int i = 1; i < 100; ++i) {
+////							String next = name + "-" + i + ".png";
+////							if (!new File(images, next).exists()) break;
+////							hash.append(",").append("../image/").append(next);
+////						}
+//					} else {
+//						logger.log(Level.SEVERE, String.format("%s(%s)は存在しません。", m.group("BESI"), new File(images, first)));
+//						return null;
+//					}
+////					return String.format("<a href='_image.html#%s'>%s</a>",
+////						hash, m.group("BESI"));
+//				}
+//				return null;
+//			}
+//		});
+//	}
 
 	private static String タグ編集(final Node node, String s, final File dir) {
 		final File images = new File(dir, "image");
@@ -164,25 +197,17 @@ public class Renderer {
 				if (m.group("TENSU") != null)
 					return String.format("<span class='tensu'>%s</span>", m.group("TENSU"));
 				else if (m.group("BESI") != null) {
-					logger.info(String.format("イメージリンク %s %s", m.group("BESI"), node.path() ));
-					String name = m.group("BESI").replaceFirst("別(紙|添)様式", "BESI").replaceFirst("の", "_");
-					name = StringConverter.toNormalWidthANS(name);
-//					StringBuilder hash = new StringBuilder();
-					String first = name + ".pdf";
-					if (new File(images, first).exists()) {
-						return String.format("<a href='image/%s'>%s</a>", first, m.group("BESI"));
-//						hash.append("../image/").append(first);
-//						for (int i = 1; i < 100; ++i) {
-//							String next = name + "-" + i + ".png";
-//							if (!new File(images, next).exists()) break;
-//							hash.append(",").append("../image/").append(next);
-//						}
+					String name = m.group("BESI");
+//					logger.info(String.format("イメージリンク %s %s", name, node.path() ));
+//					String name = m.group("BESI").replaceFirst("別(紙|添)様式", "BESI").replaceFirst("の", "_");
+//					name = StringConverter.toNormalWidthANS(name);
+					String file = 様式.id(name) + ".pdf";
+					if (new File(images, file).exists()) {
+						return String.format("<a href='image/%s'>%s</a>", file, name);
 					} else {
-						logger.log(Level.SEVERE, String.format("%s(%s)は存在しません。", m.group("BESI"), new File(images, first)));
+						logger.log(Level.SEVERE, String.format("%s(%s)は存在しません。", name, new File(images, file)));
 						return null;
 					}
-//					return String.format("<a href='_image.html#%s'>%s</a>",
-//						hash, m.group("BESI"));
 				}
 				return null;
 			}
@@ -578,8 +603,8 @@ public class Renderer {
 			else
 				p.newNode = node;
 		}
-		for (Entry<String, Pair> p : map.entrySet())
-			logger.info(p.toString());
+//		for (Entry<String, Pair> p : map.entrySet())
+//			logger.info(p.toString());
 		return map;
 	}
 

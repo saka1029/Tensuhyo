@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import saka1029.tensuhyo.dictionary.NormalizedDictionary;
@@ -99,7 +98,7 @@ public class 索引 {
 	private void 章部節款辞書追加(Node node) {
 		StringBuilder sb = new StringBuilder();
 		章部節款辞書追加(node, sb);
-		logger.log(Level.INFO, "*****" + sb.toString());
+//		logger.log(Level.INFO, "*****" + sb.toString());
 		String fname = node.fileName();
 		辞書追加(sb.toString(), node, 章部節款TYPE, fname + ".html");
 	}

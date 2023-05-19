@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,9 +20,9 @@ import java.util.regex.Pattern;
  * 別添aのbのc → Ta_b_c
  * 別紙aのbのc → Sa_b_c
  * 様式aのbのc → Ya_b_c
- * 別添6の別紙aのbのc → * T6Sa_b_c
- * 別添7の様式aのbのc → T7Ya_b_c
- * 別添2の様式aのbのc → T2Ya_b_c
+ * 別添6の別紙aのbのc → * T6_Sa_b_c
+ * 別添7の様式aのbのc → T7_Ya_b_c
+ * 別添2の様式aのbのc → T2_Ya_b_c
  * </pre>
  * @param name 様式名。ex.「別紙様式2の3」
  * @param id 様式ID。ex.「SY2_3」
@@ -31,15 +32,18 @@ import java.util.regex.Pattern;
  */
 public record 様式(String name, String id, int startPage, int endPage, String title) {
 
+	static final Logger logger = Logger.getLogger(様式.class.getName());
     static final int 様式名出現最大行 = 3;
 
     /**
      * 様式名を様式IDに変換します。
      */
     public static String id(String name) {
-        Normalizer.normalize(name.replaceAll("\\s+", ""), Form.NFKD);
-        return name.replaceAll("\\s+", "").replaceAll("別添", "T").replaceAll("別紙", "S").replaceAll("様式", "Y")
-            .replaceAll("の", "_");
+        String r =  Normalizer.normalize(name, Form.NFKD)
+			.replaceAll("\\s+", "")
+			.replaceAll("別添", "T").replaceAll("別紙", "S").replaceAll("様式", "Y")
+            .replaceAll("[のー－]", "_");
+        return r;
     }
 
     static final Pattern 施設基準様式名パターン = Pattern.compile("\\s*[(（]?\\s*(" // 様式名 (group1)
@@ -108,7 +112,7 @@ public record 様式(String name, String id, int startPage, int endPage, String 
                             if (title == null && j + 1 < lines.size())
                                 title = lines.get(j + 1);
                             title = title.replaceAll("\\s+", "");
-                            id = id(name.startsWith("別添") ? name : betten + name);
+                            id = id(name.startsWith("別添") ? name : betten + "の" + name);
                         }
                     }
                 }
@@ -122,10 +126,10 @@ public record 様式(String name, String id, int startPage, int endPage, String 
      * 医科、歯科、調剤の様式PDFファイルから様式一覧を抽出してテキストファイルに出力します。
      */
     static final Pattern 様式名パターン = Pattern.compile("\\s*[(（]?\\s*(" // 様式名 (group1)
-        + "\\s*(?:別\\s*紙\\s*様\\s*式)"
+        + "\\s*(?:別\\s*[紙添]\\s*様\\s*式)"
         + "\\s*(?:(?:\\d|\\s+)+)"  // 様式番号1
-        + "\\s*(?:の\\s*(?:(?:\\d|\\s+)+))?" // 様式番号2
-        + "\\s*(?:の\\s*(?:(?:\\d|\\s+)+))?" // 様式番号3
+        + "\\s*(?:[の-]\\s*(?:(?:\\d|\\s+)+))?" // 様式番号2
+        + "\\s*(?:[の-]\\s*(?:(?:\\d|\\s+)+))?" // 様式番号3
         + ")\\s*[)）]?(?:\\s+(.+))?"); // 様式タイトル (group2)
 
     public static void 様式一覧変換(String outTxtFile, String... inPdfFiles) throws IOException {
@@ -146,7 +150,8 @@ public record 様式(String name, String id, int startPage, int endPage, String 
                             if (name != null)
                                 out.printf("%s,%s,%d,%d,%s\n", name, id, startPage, i, title);
                             startPage = i + 1;
-                            name = m.group(1).replaceAll("\\s+", "");
+                            // 調剤は「別紙様式1」を間違えて「別添様式1」と記述している。
+                            name = m.group(1).replaceAll("\\s+", "").replaceAll("添", "紙");
                             title = m.group(2);
                             if (title == null && j + 1 < lines.size())
                                 title = lines.get(j + 1);
