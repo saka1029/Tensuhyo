@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * @param endPage 終了ページ。ex.「124」
  * @param title 様式タイトル。ex.「退院証明書」
  */
-public record 様式(String name, String id, int startPage, int endPage, String title) {
+public record 様式(String file, String name, String id, int startPage, int endPage, String title) {
 
 	static final Logger logger = Logger.getLogger(様式.class.getName());
     static final int 様式名出現最大行 = 3;
@@ -90,7 +90,7 @@ public record 様式(String name, String id, int startPage, int endPage, String 
         Files.createDirectories(Path.of(outTxtFile).getParent());
         try (PrintWriter out = new PrintWriter(outTxtFile, StandardCharsets.UTF_8)) {
             for (String inPdfFile : inPdfFiles) {
-                out.printf("#file %s\n", inPdfFile);
+//                out.printf("#file %s\n", inPdfFile);
                 List<List<String>> pageLines = new PDFBox(true).read(inPdfFile);
                 String betten = ""; // 直前の「別添n」
                 int startPage = -1;
@@ -103,7 +103,7 @@ public record 様式(String name, String id, int startPage, int endPage, String 
                         Matcher m = 施設基準様式名パターン.matcher(norm);
                         if (m.matches()) {
                             if (name != null)
-                                out.printf("%s,%s,%d,%d,%s\n", name, id, startPage, i, title);
+                                out.printf("%s,%s,%s,%d,%d,%s\n", inPdfFile, name, id, startPage, i, title);
                             startPage = i + 1;
                             name = m.group(1).replaceAll("\\s+", "");
                             if (name.matches("別添\\d+"))
@@ -117,7 +117,7 @@ public record 様式(String name, String id, int startPage, int endPage, String 
                     }
                 }
                 if (name != null)
-                    out.printf("%s,%s,%d,%d,%s\n", name, id, startPage, i, title);
+                    out.printf("%s,%s,%s,%d,%d,%s\n", inPdfFile, name, id, startPage, i, title);
             }
         }
     }
@@ -136,7 +136,7 @@ public record 様式(String name, String id, int startPage, int endPage, String 
         Files.createDirectories(Path.of(outTxtFile).getParent());
         try (PrintWriter out = new PrintWriter(outTxtFile, StandardCharsets.UTF_8)) {
             for (String inPdfFile : inPdfFiles) {
-                out.printf("#file %s\n", inPdfFile);
+//                out.printf("#file %s\n", inPdfFile);
                 List<List<String>> pageLines = new PDFBox(true).read(inPdfFile);
                 int startPage = -1;
                 String name = null, id = null, title = null;
@@ -148,7 +148,7 @@ public record 様式(String name, String id, int startPage, int endPage, String 
                         Matcher m = 様式名パターン.matcher(norm);
                         if (m.matches()) {
                             if (name != null)
-                                out.printf("%s,%s,%d,%d,%s\n", name, id, startPage, i, title);
+                                out.printf("%s,%s,%s,%d,%d,%s\n", inPdfFile, name, id, startPage, i, title);
                             startPage = i + 1;
                             // 調剤は「別紙様式1」を間違えて「別添様式1」と記述している。
                             name = m.group(1).replaceAll("\\s+", "").replaceAll("添", "紙");
@@ -161,7 +161,7 @@ public record 様式(String name, String id, int startPage, int endPage, String 
                     }
                 }
                 if (name != null)
-                    out.printf("%s,%s,%d,%d,%s\n", name, id, startPage, i, title);
+                    out.printf("%s,%s,%s,%d,%d,%s\n", inPdfFile, name, id, startPage, i, title);
             }
         }
     }

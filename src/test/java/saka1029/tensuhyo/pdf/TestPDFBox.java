@@ -17,6 +17,7 @@ import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.TextPosition;
+import org.junit.Test;
 
 public class TestPDFBox {
 
@@ -67,15 +68,14 @@ public class TestPDFBox {
 		Files.createDirectories(Path.of("test-data"));
 		String yoshikiList = "test-data/yoshiki-list.txt";
 		try (PrintWriter w = new PrintWriter(yoshikiList, StandardCharsets.UTF_8)) {
-		    w.println("#file data/in/04/i/pdf/000907839.pdf");
-		    w.println("別紙様式1,SY1,1,1,退院証明書");
-		    w.println("別紙様式2,SY2,2,4,医療区分・ＡＤＬ区分等に係る評価票");
+		    w.println("data/in/04/i/pdf/000907839.pdf,別紙様式1,SY1,1,1,退院証明書");
+		    w.println("data/in/04/i/pdf/000907839.pdf,別紙様式2,SY2,2,4,医療区分・ＡＤＬ区分等に係る評価票");
 		}
 		List<様式> result = PDFBox.ページ分割(yoshikiList, "test-data"/*, "BESI"*/);
 		assertTrue(new File("test-data/SY1.pdf").exists());
 		assertTrue(new File("test-data/SY2.pdf").exists());
 		assertEquals(2, result.size());
-		assertEquals(List.of(new 様式("別紙様式1", "SY1", 1, 1, "退院証明書"),
-		    new 様式("別紙様式2", "SY2", 2, 4, "医療区分・ＡＤＬ区分等に係る評価票")), result);
+		assertEquals(List.of(new 様式("data/in/04/i/pdf/000907839.pdf", "別紙様式1", "SY1", 1, 1, "退院証明書"),
+		    new 様式("data/in/04/i/pdf/000907839.pdf", "別紙様式2", "SY2", 2, 4, "医療区分・ＡＤＬ区分等に係る評価票")), result);
 	}
 }

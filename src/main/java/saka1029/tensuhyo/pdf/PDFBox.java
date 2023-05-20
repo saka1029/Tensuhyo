@@ -263,23 +263,25 @@ public class PDFBox {
         List<様式> result = new ArrayList<>();
         try (BufferedReader reader = Files.newBufferedReader(Path.of(inTextFile), 出力文字セット)) {
             PDDocument doc = null;
-            String line;
+            String line, curFile = null;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("#file")) {
-                    if (doc != null)
-                        doc.close();
-                    doc = PDDocument.load(line.replaceFirst("#file\\s*", ""));
-                } else if (line.isBlank() || line.startsWith("#"))
+                if (line.isBlank() || line.startsWith("#"))
                     continue;
-                else {
-                    String[] fields = line.split(",", 5);
-                    String name = fields[0];
-                    String id = fields[1];
+                    String[] fields = line.split(",", 6);
+                    String file = fields[0];
+                    String name = fields[1];
+                    String id = fields[2];
                     String outFile = /* outPdfPrefix + */ id + ".pdf";
-                    String title = fields[4];
-                    int startPage = Integer.parseInt(fields[2]);
-                    int endPage = Integer.parseInt(fields[3]);
-                    result.add(new 様式(name, id, startPage, endPage, title));
+                    String title = fields[5];
+                    int startPage = Integer.parseInt(fields[3]);
+                    int endPage = Integer.parseInt(fields[4]);
+                    result.add(new 様式(file, name, id, startPage, endPage, title));
+                    if (!file.equals(curFile)) {
+                        if (doc != null)
+                            doc.close();
+                        doc = PDDocument.load(file);
+                        curFile = file;
+                    }
                     Splitter splitter = new Splitter();
                     splitter.setStartPage(startPage);
                     splitter.setEndPage(endPage);
@@ -288,7 +290,6 @@ public class PDFBox {
                     splitted.get(0).save(outDir + "/" + outFile);
                     for (PDDocument d : splitted)
                         d.close();
-                }
             }
             if (doc != null)
                 doc.close();
