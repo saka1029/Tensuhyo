@@ -48,8 +48,12 @@ public class Release {
                 }
             }
             done[0] = max;
+        } catch (IOException e) {
+            logger.info("失敗しました。");
+            throw e;
+        } finally {
+            logger.info("切断しました。");
         }
-        logger.info("切断しました。");
     }
 
     static void release(String... paths) throws IOException {
@@ -60,9 +64,14 @@ public class Release {
             int[] done = {-1};
             while (done[0] < max)
                 try {
+                    int prev = done[0];
                     release(files, done);
+                    if (done[0] == prev) {
+                        logger.warning("これ以上処理できません。");
+                        break;
+                    }
                 } catch (IOException e) {
-                    logger.warning("失敗しました。");
+                    logger.warning("再処理します。");
                 }
         }
     }
