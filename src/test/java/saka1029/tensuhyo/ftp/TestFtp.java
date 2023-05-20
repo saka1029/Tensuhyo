@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.junit.Test;
 
 public class TestFtp {
 
@@ -36,7 +37,7 @@ public class TestFtp {
         try (Closeable c = () -> client.disconnect()) {
             client.setFileType(FTPClient.BINARY_FILE_TYPE);
 //            getPngFiles(client, "30/k/image");
-            getPngFiles(client, "30/i/image");
+//            getPngFiles(client, "30/i/image");
 //            getPngFiles(client, "30/s/image");
 //            getPngFiles(client, "30/t/image");
 //            getPngFiles(client, "01/k/image");
@@ -49,8 +50,33 @@ public class TestFtp {
 //            getPngFiles(client, "02/t/image");
 //            getPngFiles(client, "04/k/image");
 //            getPngFiles(client, "04/i/image");
-            getPngFiles(client, "04/s/image");
+//            getPngFiles(client, "04/s/image");
 //            getPngFiles(client, "04/t/image");
+        }
+    }
+    
+    static void deleteOldPdf(FTPClient client, String dir) throws IOException {
+        OUT.printf("%s:%n", dir);
+        FTPFile[] files = client.listFiles(dir,
+            f -> f.getName().contains("BESI") || f.getName().contains("BETTEN"));
+        for (var f : files) {
+            boolean deleted = client.deleteFile(dir + "/" + f.getName());
+            OUT.printf("delete %s (%d) -> %s%n", f.getName(), f.getSize(), deleted);
+        }
+    }
+
+//    @Test
+    public void testDeleteOldPdf() throws IOException {
+        String[] ftpConfig = System.getenv("FTP_CONFIG").split("\\s+");
+        FTPClient client = new FTPClient();
+        client.connect(ftpConfig[0]);
+        client.login(ftpConfig[1], ftpConfig[2]);
+        try (Closeable c = () -> client.disconnect()) {
+            client.setFileType(FTPClient.BINARY_FILE_TYPE);
+//            deleteOldPdf(client, "04/k/image");
+//            deleteOldPdf(client, "04/i/image");
+//            deleteOldPdf(client, "04/s/image");
+//            deleteOldPdf(client, "04/t/image");
         }
     }
 
