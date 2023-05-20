@@ -1,20 +1,15 @@
 package saka1029.tensuhyo.ftp;
 
-import static org.junit.Assert.*;
-
 import java.io.Closeable;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.spi.FileTypeDetector;
 import java.util.Arrays;
 
-import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
-import org.junit.Test;
 
 public class TestFtp {
 
