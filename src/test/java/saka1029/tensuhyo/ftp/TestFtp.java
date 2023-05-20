@@ -24,9 +24,9 @@ public class TestFtp {
         OUT.println("getPngFiles: " + path);
         FTPFile[] files = client.listFiles(path, f -> f.getName().endsWith(".png"));
         for (FTPFile f : files) {
-            OUT.printf("  restore %s%n", "data/web/" + path + "/" + f.getName());
+            OUT.printf("  restore %s (%d)%n", "data/web/" + path + "/" + f.getName(), f.getSize());
             try (OutputStream os = new FileOutputStream("data/web/" + path + "/" + f.getName())) {
-                client.retrieveFile(path, os);
+                client.retrieveFile(path + "/" + f.getName(), os);
             }
         }
     }
@@ -39,7 +39,7 @@ public class TestFtp {
         client.connect(ftpConfig[0]);
         client.login(ftpConfig[1], ftpConfig[2]);
         try (Closeable c = () -> client.disconnect()) {
-            client.setFileType(FTP.BINARY_FILE_TYPE);
+            client.setFileType(FTPClient.BINARY_FILE_TYPE);
             getPngFiles(client, "30/k/image");
             getPngFiles(client, "30/i/image");
             getPngFiles(client, "30/s/image");
