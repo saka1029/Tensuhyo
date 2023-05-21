@@ -110,9 +110,8 @@ public class 施設基準Renderer {
     }
 
     private static String NUM = "[0-9０-９]+";
-    private static Pattern YOSHIKI_PAT = Pattern.compile("別添(" + NUM + ")(の(別紙|様式)(" + NUM + ")"
-        + "(の(" + NUM + ")(の(" + NUM + "))?)?"
-        + ")?");
+    private static Pattern YOSHIKI_PAT = Pattern.compile("別添\\s*" + NUM + "\\s*の(別紙|様式)\\s*" + NUM
+        + "(\\s*の\\s*" + NUM + "(\\s*の\\s*" + NUM + ")?)?");
 //    private static String num(String s) {
 //        if (s == null) return "";
 //        return StringConverter.toNormalWidthANS(s);
