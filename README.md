@@ -4,7 +4,8 @@
 * [GitHub内ホームページ](https://saka1029.github.io/tensuhyo/data/web/)
 
 ## 開発環境の準備
-開発はVSCodeを使用していますが、これが必須というわけではありません。JDK(Java)とMaven、それとテキストエディタがあれば十分です。
+開発はEclipseを使用していますが、これが必須というわけではありません。JDK(Java)とMaven、それとテキストエディタがあれば十分です。
+2023年5月時点で使用しているのはOpenJDK20、Maven3.9.1(あるいは3.6.3)です。
 
 
 ### このプロジェクトのクローン
@@ -13,31 +14,27 @@
 
 ### プロジェクトのビルド
 pom.xmlの定義にしたがって、ソースコードをコンパイルし、
-targetディレクトリの下に`tensuhyo-1.0.jar`を作成します。
+targetディレクトリの下に`tensuhyo-1.0-jar-with-dependencies.jar`を作成します。
 これは以下のMavenコマンドで行います。
 ```
 mvn clean package
 ```
 
-### 依存ライブラリのダウンロード
-pom.xmlで定義した依存するライブラリのJarファイルをlibディレクトリの下にダウンロードします。
-これは以下のMavenコマンドで行います。
-```
-mvn dependency:copy-dependencies -DoutputDirectory=lib
-```
-
-## HTML/PDF生成
 
 |STEP|処理内容|
 |----|--------|
 | k0 |施設基準PDF変換|
-| k1 |施設基準HTML生成|
+| k1 |施設基準様式一覧生成|
+| k2 |施設基準HTML生成|
 | i0 |医科PDF変換|
-| i1 |医科HTML生成|
+| i1 |医科様式一覧生成|
+| i2 |医科HTML生成|
 | s0 |歯科PDF変換|
-| s1 |歯科HTML生成|
+| s1 |歯科様式一覧生成|
+| s2 |歯科HTML生成|
 | t0 |調剤PDF変換|
-| t1 |調剤HTML生成|
+| t1 |調剤様式一覧生成|
+| t2 |調剤HTML生成|
 
 ### ディレクトリ構成
 ```
