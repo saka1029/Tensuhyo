@@ -15,7 +15,7 @@ import saka1029.tensuhyo.util.TextWriter;
 
 public class 施設基準Renderer {
 
-	private static final Logger logger = Logger.getLogger(Renderer.class.getName());
+	private static final Logger logger = Logger.getLogger(施設基準Renderer.class.getName());
 
     // private static final int MAX_HEADER_SIZE = 10;
 
@@ -126,7 +126,7 @@ public class 施設基準Renderer {
                     return String.format("<a href='image/%s'>%s</a>",
                         f, m.group(0));
                 else {
-                    logger.severe("imageLink:様式がありません: " + f + " " + node.fileName());
+                    logger.severe("様式がありません: " + f + " " + node.fileName());
                     return null;
                 }
             });
