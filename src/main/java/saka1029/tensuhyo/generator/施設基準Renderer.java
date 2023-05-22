@@ -15,7 +15,7 @@ import saka1029.tensuhyo.util.TextWriter;
 
 public class 施設基準Renderer {
 
-	private static final Logger logger = Logger.getLogger(Renderer.class.getName());
+	private static final Logger logger = Logger.getLogger(施設基準Renderer.class.getName());
 
     // private static final int MAX_HEADER_SIZE = 10;
 
@@ -110,9 +110,8 @@ public class 施設基準Renderer {
     }
 
     private static String NUM = "[0-9０-９]+";
-    private static Pattern YOSHIKI_PAT = Pattern.compile("別添(" + NUM + ")(の(別紙|様式)(" + NUM + ")"
-        + "(の(" + NUM + ")(の(" + NUM + "))?)?"
-        + ")?");
+    private static Pattern YOSHIKI_PAT = Pattern.compile("別添\\s*" + NUM + "\\s*の(別紙|様式)\\s*" + NUM
+        + "(\\s*の\\s*" + NUM + "(\\s*の\\s*" + NUM + ")?)?");
 //    private static String num(String s) {
 //        if (s == null) return "";
 //        return StringConverter.toNormalWidthANS(s);
@@ -127,7 +126,7 @@ public class 施設基準Renderer {
                     return String.format("<a href='image/%s'>%s</a>",
                         f, m.group(0));
                 else {
-                    logger.severe("imageLink:様式がありません: " + f + " " + node.fileName());
+                    logger.severe("様式がありません: " + f + " " + node.fileName());
                     return null;
                 }
             });

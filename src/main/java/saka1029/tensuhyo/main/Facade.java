@@ -31,6 +31,16 @@ import saka1029.tensuhyo.pdf.様式;
 import saka1029.tensuhyo.util.TextIO;
 import saka1029.tensuhyo.util.TextWriter;
 
+/**
+ * DEAD CODE
+ * 別添Renderer -> 様式一覧Renderer
+ * 別添RendererCallback
+ * Pdf -> PDFBox
+ * IText
+ * PdfExtractor
+ * 別添 -> 様式
+ * 別添関数
+ */
 public class Facade {
     public String 元号;
     public String 年度;

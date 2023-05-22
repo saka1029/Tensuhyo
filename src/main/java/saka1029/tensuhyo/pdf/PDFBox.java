@@ -173,7 +173,7 @@ public class PDFBox {
         }
         List<TreeMap<Float, List<Element>>> fileLines = 行分割(fileElements);
         文書属性 文書属性 = 文書属性(fileLines);
-        OUT.printf("%s:%s:%n", inPdfPath, 文書属性);
+        LOGGER.info(inPdfPath + ":" + 文書属性);
         int pageNo = 0;
         for (TreeMap<Float, List<Element>> lines : fileLines) {
             ++pageNo;

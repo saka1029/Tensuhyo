@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;
-import org.junit.Test;
 
 import saka1029.tensuhyo.generator.様式一覧Renderer;
 

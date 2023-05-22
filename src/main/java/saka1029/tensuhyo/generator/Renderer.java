@@ -154,7 +154,7 @@ public class Renderer {
 
 	private static final Pattern タグ編集正規表現 = Pattern.compile(
 		"(?<TENSU>[0-9,.０-９，．]+点)|" +
-		"(?<BESI>別(紙|添)様式[0-9０-９]+(の[0-9０-９]+)?(の[0-9０-９]+)?)");
+		"(?<BESI>別\\s*(紙|添)\\s*様式\\s*[0-9０-９]+(\\s*の\\s*[0-9０-９]+)?(\\s*の\\s*[0-9０-９]+)?)");
 
 //	private static String タグ編集(final Node node, String s, final File dir) {
 //		final File images = new File(dir, "image");
