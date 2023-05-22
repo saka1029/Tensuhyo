@@ -73,10 +73,12 @@ public class TestFtp {
         client.login(ftpConfig[1], ftpConfig[2]);
         try (Closeable c = () -> client.disconnect()) {
             client.setFileType(FTPClient.BINARY_FILE_TYPE);
-//            deleteOldPdf(client, "04/k/image");
-//            deleteOldPdf(client, "04/i/image");
-//            deleteOldPdf(client, "04/s/image");
-//            deleteOldPdf(client, "04/t/image");
+            for (String n : new String[] {"30", "01", "02", "04"}) {
+//				deleteOldPdf(client, n + "/k/image");
+//				deleteOldPdf(client, n + "/i/image");
+//				deleteOldPdf(client, n + "/s/image");
+//				deleteOldPdf(client, n + "/t/image");
+            }
         }
     }
 
