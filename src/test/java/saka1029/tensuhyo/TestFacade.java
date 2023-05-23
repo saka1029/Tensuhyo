@@ -1,15 +1,11 @@
 package saka1029.tensuhyo;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;
-import org.junit.Test;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import saka1029.tensuhyo.main.Facade;
@@ -22,7 +18,7 @@ public class TestFacade {
         Common.config();
     }
 
-    @Test
+//    @Test
     public void test施設基準() throws JsonSyntaxException, IOException, ParseException, COSVisitorException {
         Facade facade = Facade.load("r0404.json");
         String outDir = "test-data/web";

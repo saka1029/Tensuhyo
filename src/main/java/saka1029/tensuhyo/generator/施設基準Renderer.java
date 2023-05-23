@@ -117,7 +117,8 @@ public class 施設基準Renderer {
 //        return StringConverter.toNormalWidthANS(s);
 //    }
 
-    private String imageLink(String s, Node node) {
+    private String imageLinkTuti(String s, Node node) {
+//        logger.info(node.fileName() + " " + node.name() + " " + node.header());
         String repl = StringEditor.replace(s, YOSHIKI_PAT,
             m -> {
             	String f = 様式.id(m.group(0)) + ".pdf";
@@ -137,19 +138,54 @@ public class 施設基準Renderer {
         if (top) w.printf("<p>[通知]</p>");
         String number = Renderer.spaces(level) + node.number() + "　";
         int indent = Node.indent(number);
-        String para = imageLink(node.header() + node.paragrahText(), node);
+        String para = imageLinkTuti(node.header() + node.paragrahText(), node);
         w.printf("<p id='%s' class='m%d'>%s%s</p>\n",
             node.fileName(), indent, number, para);
-//            node.paragrahText());
         for (Node child : node.children())
             detailTuti(child, w, level + 1, false);
+    }
+    
+    static String number(String kanji) {
+        String n = kanji.replaceAll("\\s+", "")
+            .replaceFirst("^十$", "10")
+            .replaceFirst("^十", "1")
+            .replaceAll("十", "")
+            .replaceAll("一", "1")
+            .replaceAll("二", "2")
+            .replaceAll("三", "3")
+            .replaceAll("四", "4")
+            .replaceAll("五", "5")
+            .replaceAll("六", "6")
+            .replaceAll("七", "7")
+            .replaceAll("八", "8")
+            .replaceAll("九", "9");
+        return n;
+    }
+    
+    static final String 漢数字 = "[一二三四五六七八九十]+";
+    static final Pattern BEPYO_PAT = Pattern.compile("別表\\s*第\\s*(" + 漢数字 + ")"
+        + "(?:\\s*の\\s*(" + 漢数字 + "))?"
+        + "(?:\\s*の\\s*(" + 漢数字 + "))?");
+    
+    private String imageLinkKokuji(String s, Node node) {
+        return StringEditor.replace(s, BEPYO_PAT,
+            m -> {
+                String link = "<a href='%s.b.%s%s%s.html'>%s</a>".formatted(
+                    node.fileName().substring(0, 1),
+                    number(m.group(1)),
+                    m.group(2) == null ? "" : "-" + number(m.group(2)),
+                    m.group(3) == null ? "" : "-" + number(m.group(3)),
+                    m.group());
+//                logger.info(node.fileName() + ":" + link);
+                return link;
+            });
     }
 
     private void detail(Node node, TextWriter w, int level) throws IOException {
         String number = Renderer.spaces(level) + node.number() + "　";
         int indent = Node.indent(number);
-        w.printf("<p id='%s' class='m%d'>%s%s%s</p>\n", node.fileName(), indent, number, node.header(),
-            node.paragrahText());
+        String para = imageLinkKokuji(node.header() + node.paragrahText(), node);
+        w.printf("<p id='%s' class='m%d'>%s%s</p>\n", node.fileName(), indent, number, para);
         for (Node child : node.children())
             detail(child, w, level + 1);
         if (node.tuti() != null) {
