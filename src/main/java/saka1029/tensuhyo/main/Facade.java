@@ -2,10 +2,16 @@ package saka1029.tensuhyo.main;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import saka1029.tensuhyo.generator.Renderer;
 import saka1029.tensuhyo.generator.RendererOption;
@@ -42,6 +48,9 @@ import saka1029.tensuhyo.util.TextWriter;
  * 別添関数
  */
 public class Facade {
+    
+    static final Logger logger = Logger.getLogger(Facade.class.getName());
+
     public String 元号;
     public String 年度;
     public String 旧元号;
@@ -58,22 +67,27 @@ public class Facade {
     public String[] 調剤様式PDF;
     public String[] 施設基準告示PDF;
     public String[] 施設基準通知PDF;
-//    public String[] 施設基準基本様式PDF;
-//    public String[] 施設基準特掲様式PDF;
     public String[] 施設基準様式PDF;
+    public String 入力ディレクトリ = "data/in";
+    public String 出力ディレクトリ = "data/web";
+    public String サーバURL = "http://tensuhyo.html.xdomain.jp";
 
     static final String ENCODING = "UTF-8";
-
+    
+    public static Facade load(String configFile) throws JsonSyntaxException, IOException {
+        return new Gson().fromJson(Files.readString(Path.of(configFile)), Facade.class);
+    }
+    
 	// static { Common.config(); }
 
     String[] PDFパス(String 点数表, String[] pdfs) {
         return Arrays.stream(pdfs)
-            .map(pdf -> "data/in/%s/%s/pdf/%s".formatted(年度, 点数表, pdf))
+            .map(pdf -> 入力ディレクトリ + "/%s/%s/pdf/%s".formatted(年度, 点数表, pdf))
             .toArray(String[]::new);
     }
 
     String テキストパス(String 年度, String 点数表, String テキストファイル) {
-        return "data/in/%s/%s/txt/%s.txt".formatted(年度, 点数表, テキストファイル);
+        return 入力ディレクトリ + "/%s/%s/txt/%s.txt".formatted(年度, 点数表, テキストファイル);
     }
 
     String テキストパス(String 点数表, String テキストファイル) {
@@ -81,14 +95,15 @@ public class Facade {
     }
 
     String HTMLパス(String 点数表) {
-        return "data/web/%s/%s".formatted(年度, 点数表);
+        return 出力ディレクトリ + "/%s/%s".formatted(年度, 点数表);
     }
 
     String ベースURL(String 点数表) {
-        return "http://tensuhyo.html.xdomain.jp/%s/%s".formatted(年度, 点数表);
+        return サーバURL + "/%s/%s".formatted(年度, 点数表);
     }
 
 	public void 施設基準告示変換() throws IOException {
+	    logger.info("開始: 施設基準告示変換");
 	    new PDFBox(false).テキスト変換(テキストパス("k", "kokuji"), PDFパス("k", 施設基準告示PDF));
 //	    Pdf.toText(PDFパス("k", 施設基準告示PDF), テキストパス("k", "kokuji"), false, 22F, 14F, 0.5F, Pdf.Skip.TEXT,
 //        new StringFunction() {
@@ -99,6 +114,7 @@ public class Facade {
 	}
 
 	public void 施設基準通知変換() throws IOException {
+	    logger.info("開始: 施設基準通知変換");
 	    new PDFBox(true).テキスト変換(テキストパス("k", "tuti"), PDFパス("k", 施設基準通知PDF));
 //	    Pdf.toText(PDFパス("k", 施設基準通知PDF), テキストパス("k", "tuti"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE,
 //        new StringFunction() {
@@ -109,10 +125,12 @@ public class Facade {
 	}
 
 	public void 施設基準様式一覧変換() throws IOException {
+	    logger.info("開始: 施設基準様式一覧変換");
 	    様式.施設基準様式一覧変換(テキストパス("k", "yoshiki"), PDFパス("k", 施設基準様式PDF));
 	}
 
 	public void 施設基準HTML生成() throws IOException, ParseException {
+	    logger.info("開始: 施設基準HTML生成変換");
 		String kokujiIn = TextIO.ReadFrom(テキストパス("k", "告示"), ENCODING);
 		Parser kokujiParser = new 施設基準告示読込();
 		Document kokujiDoc = kokujiParser.parse(kokujiIn, 元号 + 年度 + "年施設基準");
@@ -229,11 +247,13 @@ public class Facade {
 //	}
 	
 	public void 施設基準様式一覧生成() throws IOException, COSVisitorException {
+	    logger.info("開始: 施設基準様式一覧生成");
 	    List<様式> list = PDFBox.ページ分割(テキストパス("k", "様式"), HTMLパス("k") + "/image");
         new 様式一覧Renderer().HTML出力(list, HTMLパス("k") + "/yoshiki.html", 元号 + 年度 + "年 施設基準様式一覧");
 	}
 
     public void 医科告示変換() throws IOException {
+	    logger.info("開始: 医科告示変換");
 	    new PDFBox(true).テキスト変換(テキストパス("i", "kokuji"), PDFパス("i", 医科告示PDF));
 //	    Pdf.toText(PDFパス("i", 医科告示PDF), テキストパス("i", "kokuji"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE,
 //        new StringFunction() {
@@ -244,6 +264,7 @@ public class Facade {
     }
 
     public void 医科通知変換() throws IOException {
+	    logger.info("開始: 医科通知変換");
 	    new PDFBox(true).テキスト変換(テキストパス("i", "tuti"), PDFパス("i", 医科通知PDF));
 //	    Pdf.toText(PDFパス("i", 医科通知PDF), テキストパス("i", "tuti"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE,
 //        new StringFunction() {
@@ -254,10 +275,12 @@ public class Facade {
     }
 
 	public void 医科様式一覧変換() throws IOException {
+	    logger.info("開始: 医科様式一覧変換");
 	    様式.様式一覧変換(テキストパス("i", "yoshiki"), PDFパス("i", 医科様式PDF));
 	}
 
 	public void 医科HTML生成() throws IOException, ParseException {
+	    logger.info("開始: 医科HTML生成");
 		String inText = TextIO.ReadFrom(テキストパス("i", "告示"), ENCODING);
 		Parser parser = new 医科告示読込();
 		Document doc = parser.parse(inText, 元号 + 年度 + "年医科");
@@ -295,6 +318,7 @@ public class Facade {
 	}
     
 	public void 医科区分一覧生成() throws IOException, ParseException {
+	    logger.info("開始: 医科区分一覧生成");
 		String oldText = TextIO.ReadFrom(テキストパス(旧年度, "i", "告示"), ENCODING);
 		Parser oldParser = new 医科告示読込();
 		Document oldDoc = oldParser.parse(oldText, 旧元号 + 旧年度 + "医科");
@@ -367,11 +391,13 @@ public class Facade {
 //	}
 	
 	public void 医科様式一覧生成() throws IOException, COSVisitorException {
+	    logger.info("開始: 医科様式一覧生成");
 	    List<様式> list = PDFBox.ページ分割(テキストパス("i", "様式"), HTMLパス("i") + "/image");
         new 様式一覧Renderer().HTML出力(list, HTMLパス("i") + "/yoshiki.html", 元号 + 年度 + "年 医科様式一覧");
 	}
 
 	public void 歯科告示変換() throws IOException {
+	    logger.info("開始: 歯科告示変換");
 	    new PDFBox(true).テキスト変換(テキストパス("s", "kokuji"), PDFパス("s", 歯科告示PDF));
 //	    Pdf.toText(PDFパス("s", 歯科告示PDF), テキストパス("s", "kokuji"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE, new StringFunction() {
 //            @Override public String eval(String line) { return line.matches("^\\s*\\S*\\s*-\\s*[0-9０-９]+\\s*-$") ? "#" + line : line; }
@@ -379,6 +405,7 @@ public class Facade {
 	}
 
 	public void 歯科通知変換() throws IOException {
+	    logger.info("開始: 歯科通知変換");
 	    new PDFBox(true).テキスト変換(テキストパス("s", "tuti"), PDFパス("s", 歯科通知PDF));
 //	    Pdf.toText(PDFパス("s", 歯科通知PDF), テキストパス("s", "tuti"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE, new StringFunction() {
 //            @Override public String eval(String line) { return line.matches("^\\s*\\S*\\s*-\\s*[0-9０-９]+\\s*-$") ? "#" + line : line; }
@@ -386,10 +413,12 @@ public class Facade {
 	}
 
 	public void 歯科様式一覧変換() throws IOException {
+	    logger.info("開始: 歯科様式一覧変換");
 	    様式.様式一覧変換(テキストパス("s", "yoshiki"), PDFパス("s", 歯科様式PDF));
 	}
 
 	public void 歯科HTML生成() throws IOException, ParseException {
+	    logger.info("開始: 歯科HTML生成");
 		String inText = TextIO.ReadFrom(テキストパス("s", "告示"), ENCODING);
 		Parser parser = new 医科告示読込();
 		Document doc = parser.parse(inText, 元号 + 年度 + "歯科");
@@ -427,6 +456,7 @@ public class Facade {
 	}
 
 	public void 歯科区分一覧生成() throws IOException, ParseException {
+	    logger.info("開始: 歯科区分一覧生成");
 		String oldText = TextIO.ReadFrom(テキストパス(旧年度, "s", "告示"), ENCODING);
 		Parser oldParser = new 医科告示読込();
 		Document oldDoc = oldParser.parse(oldText, 旧元号 + 旧年度 + "年歯科");
@@ -498,11 +528,13 @@ public class Facade {
 //	}
 	
 	public void 歯科様式一覧生成() throws IOException, COSVisitorException {
+	    logger.info("開始: 歯科様式一覧生成");
 	    List<様式> list = PDFBox.ページ分割(テキストパス("s", "様式"), HTMLパス("s") + "/image");
         new 様式一覧Renderer().HTML出力(list, HTMLパス("s") + "/yoshiki.html", 元号 + 年度 + "年 歯科様式一覧");
 	}
 
 	public void 調剤告示変換() throws IOException {
+	    logger.info("開始: 調剤告示変換");
 	    new PDFBox(true).テキスト変換(テキストパス("t", "kokuji"), PDFパス("t", 調剤告示PDF));
 //	    Pdf.toText(PDFパス("t", 調剤告示PDF), テキストパス("t", "kokuji"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE,
 //        new StringFunction() {
@@ -513,6 +545,7 @@ public class Facade {
 	}
 
 	public void 調剤通知変換() throws IOException {
+	    logger.info("開始: 調剤通知変換");
 	    new PDFBox(true).テキスト変換(テキストパス("t", "tuti"), PDFパス("t", 調剤告示PDF));
 //	    Pdf.toText(PDFパス("t", 調剤通知PDF), テキストパス("t", "tuti"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE,
 //        new StringFunction() {
@@ -523,10 +556,12 @@ public class Facade {
 	}
 
 	public void 調剤様式一覧変換() throws IOException {
+	    logger.info("開始: 調剤様式一覧変換");
 	    様式.様式一覧変換(テキストパス("t", "yoshiki"), PDFパス("t", 調剤様式PDF));
 	}
 
 	public void 調剤HTML生成() throws IOException, ParseException {
+	    logger.info("開始: 調剤HTML生成");
 		String inText = TextIO.ReadFrom(テキストパス("t", "告示"), ENCODING);
 		Parser parser = new 調剤告示読込();
 		Document doc = parser.parse(inText, 元号 + 年度 + "年調剤");
@@ -563,6 +598,7 @@ public class Facade {
 	}
  
 	public void 調剤区分一覧生成() throws IOException, ParseException {
+	    logger.info("開始: 調剤区分一覧生成");
 		String oldText = TextIO.ReadFrom(テキストパス(旧年度, "t", "告示"), ENCODING);
 		Parser oldParser = new 調剤告示読込();
 		Document oldDoc = oldParser.parse(oldText, 旧元号 + 旧年度 + "年調剤");
@@ -636,6 +672,7 @@ public class Facade {
 //	}
 	
 	public void 調剤様式一覧生成() throws IOException, COSVisitorException {
+	    logger.info("開始: 調剤様式一覧生成");
 	    List<様式> list = PDFBox.ページ分割(テキストパス("t", "様式"), HTMLパス("t") + "/image");
         new 様式一覧Renderer().HTML出力(list, HTMLパス("t") + "/yoshiki.html", 元号 + 年度 + "年 調剤様式一覧");
 	}
