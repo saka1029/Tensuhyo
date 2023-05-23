@@ -31,6 +31,7 @@ public class Release {
         client.login(user, password);
         logger.info("ログインしました。");
         try (Closeable c = () -> client.disconnect()) {
+            client.enterLocalPassiveMode();
             client.setFileType(FTPClient.BINARY_FILE_TYPE);
             int max = files.size();
             for (int i = done[0] + 1; i < max; done[0] = i++) {
