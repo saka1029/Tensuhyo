@@ -31,7 +31,7 @@ public class Release {
         }
     }
 
-    static void release(List<Path> files, int[] done) throws IOException {
+    static void release(List<Path> files, int[] next) throws IOException {
         FTPClient client = new FTPClient();
         client.connect(server);
         logger.info("接続しました。");
@@ -43,7 +43,7 @@ public class Release {
             if (!client.setFileType(FTPClient.BINARY_FILE_TYPE))
                 throw new UnrecoverableIOException("enterLocalPassiveMode fail");
             int max = files.size();
-            for (int i = done[0] + 1; i < max; done[0] = i++) {
+            for (int i = next[0]; i < max; next[0] = ++i) {
                 Path f = files.get(i);
                 Path remotePath = f.subpath(ROOT.getNameCount(), f.getNameCount());
                 String remote = "/" + remotePath.toString().replaceAll("\\\\", "/");
@@ -58,7 +58,6 @@ public class Release {
                     }
                 }
             }
-            done[0] = max;
         } catch (IOException e) {
             logger.info("失敗しました。");
             throw e;
@@ -72,12 +71,12 @@ public class Release {
             Path p = ROOT.resolve(path);
             List<Path> files = Files.walk(p).toList();
             int max = files.size();
-            int[] done = {-1};
-            while (done[0] < max)
+            int[] next = {0};
+            while (next[0] < max)
                 try {
-                    int prev = done[0];
-                    release(files, done);
-                    if (done[0] == prev) {
+                    int prev = next[0];
+                    release(files, next);
+                    if (next[0] == prev) {
                         logger.warning("これ以上処理できません。");
                         break;
                     }
