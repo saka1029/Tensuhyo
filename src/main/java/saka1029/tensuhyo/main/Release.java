@@ -24,15 +24,24 @@ public class Release {
     
     static String server, user, password;
 
+    static class UnrecoverableIOException extends IOException {
+        private static final long serialVersionUID = 1L;
+        UnrecoverableIOException(String message) {
+            super(message);
+        }
+    }
+
     static void release(List<Path> files, int[] done) throws IOException {
         FTPClient client = new FTPClient();
         client.connect(server);
         logger.info("接続しました。");
-        client.login(user, password);
+        if (!client.login(user, password))
+            throw new UnrecoverableIOException("login failed");
         logger.info("ログインしました。");
         try (Closeable c = () -> client.disconnect()) {
             client.enterLocalPassiveMode();
-            client.setFileType(FTPClient.BINARY_FILE_TYPE);
+            if (!client.setFileType(FTPClient.BINARY_FILE_TYPE))
+                throw new UnrecoverableIOException("enterLocalPassiveMode fail");
             int max = files.size();
             for (int i = done[0] + 1; i < max; done[0] = i++) {
                 Path f = files.get(i);
@@ -42,9 +51,10 @@ public class Release {
                     logger.info("mkdir " + remote);
                     client.makeDirectory(remote);
                 } else {
-                    logger.info("upload " + f + " to " + remote);
+                    logger.info("uploading " + f + " to " + remote);
                     try (InputStream is = Files.newInputStream(f)) {
-                        client.storeFile(remote, is);
+                        if (!client.storeFile(remote, is))
+                            throw new IOException("storeFile fail");
                     }
                 }
             }
@@ -71,6 +81,9 @@ public class Release {
                         logger.warning("これ以上処理できません。");
                         break;
                     }
+                } catch (UnrecoverableIOException e) {
+                    logger.warning("回復不可能なエラーです。(" + e.getMessage() + ")");
+                    return;
                 } catch (IOException e) {
                     logger.warning("再処理します。");
                 }
