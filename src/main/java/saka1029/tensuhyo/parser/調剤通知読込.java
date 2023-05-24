@@ -14,7 +14,7 @@ public class 調剤通知読込 extends BaseParser {
 //		add(数字点.value);
 //		add(数字例.value);
 		add(数字括弧.value);
-//		add(数字丸.value);
+		add(数字丸.value);
 //		add(数字米.value);
 		add(カナ.value);
 		add(カナ括弧.value);

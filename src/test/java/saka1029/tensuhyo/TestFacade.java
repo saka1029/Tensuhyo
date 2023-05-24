@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;
+import org.junit.Test;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -26,6 +27,16 @@ public class TestFacade {
         facade.出力ディレクトリ = outDir;
 //        facade.施設基準様式一覧生成();
         facade.施設基準HTML生成();
+    }
+    
+    @Test
+    public void test調剤() throws JsonSyntaxException, IOException, ParseException {
+        Facade facade = Facade.load("r0404.json");
+        String outDir = "test-data/web";
+        Files.createDirectories(Path.of(outDir));
+        facade.出力ディレクトリ = outDir;
+        facade.調剤HTML生成();
+        facade.調剤区分一覧生成();
     }
 
 }

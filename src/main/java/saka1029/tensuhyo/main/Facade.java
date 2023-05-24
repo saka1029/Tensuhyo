@@ -546,7 +546,7 @@ public class Facade {
 
 	public void 調剤通知変換() throws IOException {
 	    logger.info("開始: 調剤通知変換");
-	    new PDFBox(true).テキスト変換(テキストパス("t", "tuti"), PDFパス("t", 調剤告示PDF));
+	    new PDFBox(true).テキスト変換(テキストパス("t", "tuti"), PDFパス("t", 調剤通知PDF));
 //	    Pdf.toText(PDFパス("t", 調剤通知PDF), テキストパス("t", "tuti"), true, 5F, 10F, 0.5F, Pdf.Skip.LINE,
 //        new StringFunction() {
 //            @Override public String eval(String line) {
