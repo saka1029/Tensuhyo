@@ -14,7 +14,8 @@
     const link = " <a class='link-menu' target='_top' href='";
     const path = location.pathname;
     historyMenu += link + path.replace(/(\/\d\d\/.\/).*/, "$1index.html") + "'>本文</a>";
-    historyMenu += link + path.replace(/(\/\d\d\/.\/)(.*)\.html/, "$1kubun.html#$2") + "'>区分番号一覧</a>";
+    if (!path.match(/\/\d\d\/k\//))
+        historyMenu += link + path.replace(/(\/\d\d\/.\/)(.*)\.html/, "$1kubun.html#$2") + "'>区分番号一覧</a>";
     historyMenu += link + "yoshiki.html'>様式一覧</a>";
     historyMenu += link + "../k/0.html'>施設基準</a>";
     historyMenu += " | ";
